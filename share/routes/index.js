@@ -5,7 +5,7 @@ const chalk = require('chalk');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 
-//MODELS
+//////////////////////////////////////////////////////////////////////////////////////////////////////////IMPORT MODELS
 const User = require('../models/User')
 const Brand = require('../models/Brand')
 const Local = require('../models/Local')
@@ -18,10 +18,10 @@ router.use((req, res, next) => {
     next()
   })
 
-//HOME
+//////////////////////////////////////////////////////////////////////////////////////////////////////////HOME
 router.get('/',function(req,res){return res.send("Página Inicial")});
 
-//REGISTER
+//////////////////////////////////////////////////////////////////////////////////////////////////////////REGISTER
 router.post('/auth/register', async(req, res)=>{
   const {name, email, password, confirmpassword} =  req.body
   if(!name){
@@ -63,7 +63,7 @@ router.post('/auth/register', async(req, res)=>{
 
 })
 
-//LOGIN
+//////////////////////////////////////////////////////////////////////////////////////////////////////////LOGIN
 router.post('/auth/login', async(req, res)=>{
   const {email, password } =  req.body
   if(!email){
@@ -79,7 +79,7 @@ router.post('/auth/login', async(req, res)=>{
     return res.status(404).json({ msg:"Este e-mail não está cadastrado!"})
   }
 
-  //CHECK PASSWORD
+ //CHECK PASSWORD
   const checkPassword = await bcrypt.compare(password, user.password)
 
   if(!checkPassword){
@@ -100,21 +100,18 @@ router.post('/auth/login', async(req, res)=>{
 
 })
 
-//PRIVATE ROUTES
 
-//ITEMS
-router.get('/items',function(req,res){return res.send("Todos os Itens")})
-router.get('/item/:id',function(req,res){return res.send("Item "+ req.params.id)})
-//MOVEMENTS
-router.get('/movements',function(req,res){return res.send("Todas as Movimentações")})
-router.get('/movement/:id',function(req,res){return res.send("Movimento "+ req.params.id)})
-//USERS
+//////////////////////////////////////////////////////////////////////////////////////////////////////////PRIVATE ROUTES
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////USERS
+
 router.get('/users',async function(req, res){
   const users = await User.findAll({
     attributes: { exclude: ['password'] } // Exclui o campo 'password'
   })
   if(users.length == 0){
-    return res.send("Nenhum usuário cadastrado!")
+    return res.status(204).json({ msg:"Nenhum usuário cadastrado!" })
   }
   return res.send(users)
 })
@@ -126,12 +123,13 @@ router.get('/user/:id', async (req, res) => {
     attributes: { exclude: ['password'] } // Exclui o campo 'password'
   })
   if(!user){
-    return res.status(404).json({ msg:"Usuário não encontrado!"})
+    return res.status(404).json({ msg:"Usuário não encontrado!" })
   }
    res.status(200).json({user})
 })
 
-//BRANDS
+//////////////////////////////////////////////////////////////////////////////////////////////////////////BRANDS
+
 router.post('/brand/new', async(req, res)=>{
   const {name, website, logo} =  req.body
   if(!name){
@@ -163,7 +161,7 @@ router.post('/brand/new', async(req, res)=>{
 router.get('/brands',async function(req, res){
   const brands = await Brand.findAll()
   if(brands.length == 0){
-    return res.send("Nenhum Fabricante cadastrado!")
+    return res.status(204).json({ msg:"Nenhum Fabricante cadastrado!" })
   }
   return res.send(brands)
 })
@@ -177,7 +175,8 @@ router.get('/brand/:id', async (req, res) => {
    res.status(200).json({brand})
 })
 
-//LOCALS
+//////////////////////////////////////////////////////////////////////////////////////////////////////////LOCALS
+
 router.post('/local/new', async(req, res)=>{
   const {name} =  req.body
   if(!name){
@@ -207,7 +206,7 @@ router.post('/local/new', async(req, res)=>{
 router.get('/locals',async function(req, res){
   const locals = await Local.findAll()
   if(locals.length == 0){
-    return res.send("Nenhum Local cadastrado!")
+    return res.status(204).json({ msg:"Nenhum fabricante cadastrado!" })
   }
   return res.send(locals)
 })
@@ -220,5 +219,112 @@ router.get('/local/:id', async (req, res) => {
   }
    res.status(200).json({local})
 })
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////ITEMS
+
+router.post('/item/new', async(req, res)=>{
+  const {description, barcode, quantity, minimum, adress, localId, brandId} =  req.body
+  if(!description){
+    return res.status(422).json({ msg:"Descrição é obrigatória!"})
+  }
+  if(!adress){
+    return res.status(422).json({ msg:"Endereço de estoque é obrigatório!"})
+  }
+
+  //CHECK ITEM
+  const itemExists = await Item.findOne({ where: { description: description } });
+  if(itemExists){
+    return res.status(422).json({ msg:"Este Item já está cadastrado!"})
+  }
+
+  //CREATE ITEM
+  const item = new Item({
+    description, 
+    adress,
+    barcode,
+    quantity: quantity ? quantity : 0,
+    minimum: minimum ? minimum : 0,
+    brandId: brandId ? brandId : 1,
+    localId: localId ? localId : 1,
+  })
+
+  try {
+    await item.save()
+    return res.status(201).json({msg:"Novo item adicionado com sucesso!"})
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({msg: 'Erro ao cadastrar o item! Erro:'+error})
+  }
+})
+
+router.get('/items',async function(req, res){
+  const items = await Item.findAll()
+  if(items.length == 0){
+    return res.status(204).json({ msg:"Nenhum item cadastrado!" })
+  }
+  return res.send(items)
+})
+
+router.get('/item/:id', async (req, res) => {
+  const id = req.params.id
+  const item = await Item.findByPk(id)
+  if(!item){
+    return res.status(404).json({ msg:"Item não encontrado!"})
+  }
+   res.status(200).json({item})
+})
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////MOVEMENTS
+
+router.post('/movement/new', async(req, res)=>{
+  const {type, quantity, destination, itemId, userId} =  req.body
+  if(!type){
+    return res.status(422).json({ msg:"Tipo de movimentação é obrigatório!"})
+  }
+  if(!quantity || quantity == 0){
+    return res.status(422).json({ msg:"Quantidade é obrigatória!"})
+  }
+  if(!destination){
+    return res.status(422).json({ msg:"Destino é obrigatório!"})
+  }
+  if(!itemId){
+    return res.status(422).json({ msg:"Item é obrigatório!"})
+  }
+
+  //CREATE MOVEMENT
+  const movement = new Movement({
+    type, 
+    quantity,
+    destination,
+    itemId,
+    userId,
+  })
+
+  try {
+    await movement.save()
+    return res.status(201).json({msg: 'OK'})
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({msg: 'FAIL'})
+  }
+})
+
+router.get('/movements',async function(req, res){
+  const movements = await Movement.findAll()
+  if(movements.length == 0){
+    return res.status(204).json({ msg:"Nenhuma movimentação cadastrada!" })
+  }
+  return res.send(movements)
+})
+
+router.get('/movement/:id', async (req, res) => {
+  const id = req.params.id
+  const movement = await Movement.findByPk(id)
+  if(!movement){
+    return res.status(404).json({ msg:"Movimentação não encontrada!"})
+  }
+   res.status(200).json({movement})
+})
+
 
 module.exports = router;
