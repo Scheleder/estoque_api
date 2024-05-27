@@ -23,6 +23,11 @@ const database = new Sequelize(db_name, db_user, db_pass, {
   try {
       database.authenticate();
       console.log(chalk.blue("mySQL connected successfully!"));
+      //CREATE DATABASE
+      //database.sync({ force: true });
+      //UPDATE DATABASE
+      //database.sync();
+      //console.log('All models were synchronized successfully.');
     } catch (error) {
       console.error(chalk.red("Fail on mySQL connection: ", error));
     }

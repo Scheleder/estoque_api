@@ -1,16 +1,10 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const database = require('../db');
 
-const Brand = database.define('Brand', {
+const Local = database.define('Local', {
   name: {
     type: DataTypes.STRING,
     allowNull: false
-  },
-  website: {
-    type: DataTypes.STRING
-  },
-  logo: {
-    type: DataTypes.STRING
   },
   createdBy: {
     type: DataTypes.INTEGER,
@@ -22,7 +16,6 @@ const Brand = database.define('Brand', {
   },
 }, {
   timestamps: true,
-});
-  
+});  
 
-module.exports = Brand;
+module.exports = Local;

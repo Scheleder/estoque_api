@@ -1,8 +1,10 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const database = require('../db');
+const Local = require('../models/Local')
+const Brand = require('../models/Brand')
+const Movement = require('../models/Movement')
 
-const User = database.define('Item', {
-    // Model attributes are defined here
+const Item = database.define('Item', {
     description: {
         type: DataTypes.STRING,
         allowNull: false
@@ -12,44 +14,31 @@ const User = database.define('Item', {
         allowNull: false
     },
     quantity: {
-        type: DataTypes.DECIMAL,
+        type: DataTypes.DECIMAL(10, 4),
         defaultValue: 0.0000,
     },
     minimum: {
-        type: DataTypes.DECIMAL,
+        type: DataTypes.DECIMAL(10, 4),
         defaultValue: 0.0000,
     },
     adress: {
         type: DataTypes.STRING
         // allowNull defaults to true
     },
-    brandId: {
-        type: DataTypes.INTEGER,
-    },
-    createdAt: {
-        type: DataTypes.DATE,
-        defaultValue: Date.now,
-        // allowNull defaults to true
-    },
-    updatedAt: {
-        type: DataTypes.DATE,
-        defaultValue: Date.now,
-        // allowNull defaults to true
-    },
     createdBy: {
         type: DataTypes.INTEGER,
         allowNull: true
     },
-        updatedBy: {
+    updatedBy: {
         type: DataTypes.INTEGER,
         allowNull: true
-    },
-  }, {
-    // Other model options go here
-  });
-  
-  Item.hasMany(Movement, { as: 'movements', foreignKey: 'itemId' });
-  Item.hasOne(Brand, { as: 'brand', foreignKey: 'brandId' });
-  // `sequelize.define` also returns the model
-  //console.log(Curso === database.models.Curso); // true 
-  module.exports = Item;
+},
+}, {
+    timestamps: true,
+});
+
+Item.Movements = Item.hasMany(Movement, { foreignKey: 'itemId' });
+Item.Brand = Item.belongsTo(Brand, { foreignKey: 'brandId' });
+Item.Local = Item.belongsTo(Local, { foreignKey: 'localId' });
+
+module.exports = Item;
