@@ -1,6 +1,5 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const database = require('../db');
-const Movement = require('../models/Movement')
 
 const User = database.define('User', {
     name: {
@@ -16,7 +15,5 @@ const User = database.define('User', {
 }, {
   timestamps: true,
 });
-
-User.Movements = User.hasMany(Movement, { foreignKey: 'userId' });
 
 module.exports = User;

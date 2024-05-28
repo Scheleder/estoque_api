@@ -1,5 +1,7 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const database = require('../db');
+const Item = require('../models/Item')
+const User = require('../models/User')
 
 const Movement = database.define('Movement', {
 type: {
@@ -24,5 +26,9 @@ itemId: {
     timestamps: true,
   });
   
+  Movement.belongsTo(Item, { constraint:true, foreignKey: 'itemId' })
+  Movement.belongsTo(User, { constraint:true, foreignKey: 'userId' })
+  Item.hasMany(Movement, { foreignKey: 'itemId' });
+  User.hasMany(Movement, { foreignKey: 'userId' });
 
   module.exports = Movement;

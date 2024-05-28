@@ -2,7 +2,6 @@ const { Sequelize, DataTypes } = require('sequelize');
 const database = require('../db');
 const Local = require('../models/Local')
 const Brand = require('../models/Brand')
-const Movement = require('../models/Movement')
 
 const Item = database.define('Item', {
     description: {
@@ -23,7 +22,6 @@ const Item = database.define('Item', {
     },
     adress: {
         type: DataTypes.STRING
-        // allowNull defaults to true
     },
     createdBy: {
         type: DataTypes.INTEGER,
@@ -37,8 +35,9 @@ const Item = database.define('Item', {
     timestamps: true,
 });
 
-Item.Movements = Item.hasMany(Movement, { foreignKey: 'itemId' });
-Item.Brand = Item.belongsTo(Brand, { foreignKey: 'brandId' });
-Item.Local = Item.belongsTo(Local, { foreignKey: 'localId' });
+Item.belongsTo(Brand, { constraint:true, foreignKey: 'brandId' });
+Item.belongsTo(Local, { constraint:true, foreignKey: 'localId' });
+Brand.hasMany(Item, {foreignKey: 'brandId'});
+Local.hasMany(Item, {foreignKey: 'localId'});
 
 module.exports = Item;

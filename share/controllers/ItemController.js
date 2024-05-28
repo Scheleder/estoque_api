@@ -1,4 +1,8 @@
+const Brand = require('../models/Brand')
 const Item = require('../models/Item')
+const Local = require('../models/Local')
+const Movement = require('../models/Movement')
+const User = require('../models/User')
 
 exports.create = async(req, res)=>{
   const {description, barcode, quantity, minimum, adress, localId, brandId} =  req.body
@@ -45,7 +49,7 @@ exports.getAll = async function(req, res){
 
 exports.getOne = async (req, res) => {
   const id = req.params.id
-  const item = await Item.findByPk(id)
+  const item = await Item.findByPk(id, {include: [Brand]})
   if(!item){
     return res.status(404).json({ msg:"Item não encontrado!"})
   }

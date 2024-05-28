@@ -1,4 +1,8 @@
+const Brand = require('../models/Brand')
+const Item = require('../models/Item')
+const Local = require('../models/Local')
 const Movement = require('../models/Movement')
+const User = require('../models/User')
 
 exports.create = async(req, res)=>{
   const {type, quantity, destination, itemId, userId} =  req.body
