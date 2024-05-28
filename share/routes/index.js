@@ -3,7 +3,8 @@ const router = express.Router();
 const moment = require('moment');
 const chalk = require('chalk');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const User = require('../models/User')
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////ROTAS
 const UserRouter = require('./UserRouter');
@@ -12,9 +13,10 @@ const ItemRouter = require('./ItemRouter');
 const LocalRouter = require('./LocalRouter');
 const MovementRouter = require('./MovementRouter');
 
-// middleware that is specific to this router
+//////////////////////////////////////////////////////////////////////////////////////////////////////////LOG
 router.use((req, res, next) => {
   console.log(chalk.magenta('Requisição -> Hora: '+moment().format("MM/DD/YYYY HH:mm:ss"), " && URL -> "+req.path));
+  console.log(chalk.red('IP: '+req.socket.remoteAddress));
   next()
 })
 
@@ -106,27 +108,5 @@ router.use('/brands', BrandRouter);
 router.use('/items', ItemRouter);
 router.use('/locals', LocalRouter);
 router.use('/movements', MovementRouter);
-
-// router.get('/users',async function(req, res){
-//   const users = await User.findAll({
-//     attributes: { exclude: ['password'] } // Exclui o campo 'password'
-//   })
-//   if(users.length == 0){
-//     return res.status(204).json({ msg:"Nenhum usuário cadastrado!" })
-//   }
-//   return res.send(users)
-// })
-
-// router.get('/user/:id', async (req, res) => {
-//   const id = req.params.id
-//   //check user
-//   const user = await User.findByPk(id, {
-//     attributes: { exclude: ['password'] } // Exclui o campo 'password'
-//   })
-//   if(!user){
-//     return res.status(404).json({ msg:"Usuário não encontrado!" })
-//   }
-//    res.status(200).json({user})
-// })
 
 module.exports = router;
