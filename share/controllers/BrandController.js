@@ -42,7 +42,7 @@ exports.getAll = async function(req, res){
 
 exports.getOne = async (req, res) => {
   const id = req.params.id
-  const brand = await Brand.findByPk(id)
+  const brand = await Brand.findByPk(id, {include: [Item]})
   if(!brand){
     return res.status(404).json({ msg:"Fabricante não encontrado!"})
   }

@@ -28,5 +28,7 @@ itemId: {
   
   Movement.belongsTo(Item, { constraint:true, foreignKey: 'itemId' })
   Movement.belongsTo(User, { constraint:true, foreignKey: 'userId' })
+  Item.hasMany(Movement, { foreignKey: 'itemId' });
+  User.hasMany(Movement, { foreignKey: 'userId' });
 
   module.exports = Movement;

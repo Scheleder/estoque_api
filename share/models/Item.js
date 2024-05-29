@@ -37,5 +37,7 @@ const Item = database.define('Item', {
 
 Item.belongsTo(Brand, { constraint:true, foreignKey: 'brandId' });
 Item.belongsTo(Local, { constraint:true, foreignKey: 'localId' });
+Brand.hasMany(Item, { foreignKey: 'brandId' });
+Local.hasMany(Item, { foreignKey: 'localId' });
 
 module.exports = Item;

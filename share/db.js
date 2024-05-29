@@ -16,21 +16,16 @@ const db_type = process.env.DB_DATATYPE;
 
 const database = new Sequelize(db_name, db_user, db_pass, {
     host: db_host,
-    dialect: db_type,
-    query:{raw:true}
+    dialect: db_type
   });
     
   try {
       database.authenticate();
       console.log(chalk.blue("mySQL connected successfully!"));
       //CREATE DATABASE
-      //database.sync({ force: true });
-      //UPDATE DATABASE
-      //database.sync();
-      //console.log('All models were synchronized successfully.');
-      //  database.sync({ force: true }).then(() => {
-      //    console.log("Drop and re-sync database.");
-      //  });
+       database.sync({ force: true }).then(() => {
+         console.log("Drop and re-sync database.");
+       });
     } catch (error) {
       console.error(chalk.red("Fail on mySQL connection: ", error));
     }
