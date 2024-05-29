@@ -40,7 +40,7 @@ exports.getAll = async function(req, res){
 
 exports.getOne = async (req, res) => {
   const id = req.params.id
-  const local = await Local.findByPk(id)
+  const local = await Local.findByPk(id, {include: [Item]})
   if(!local){
     return res.status(404).json({ msg:"Local não encontrado!" })
   }

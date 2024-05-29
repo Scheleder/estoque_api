@@ -47,7 +47,8 @@ exports.getAll = async function(req, res){
 
 exports.getOne = async (req, res) => {
   const id = req.params.id
-  const movement = await Movement.findByPk(id)
+  const movement = await Movement.findByPk(id, {include: [Item, User]})
+  movement.User.password = '********';
   if(!movement){
     return res.status(404).json({ msg:"Movimentação não encontrada!"})
   }
