@@ -16,6 +16,7 @@ const Local = database.define('Local', {
   },
 }, {
   timestamps: true,
+  paranoid: true
 });  
 
 module.exports = Local;

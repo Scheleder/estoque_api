@@ -47,3 +47,18 @@ exports.getOne = async (req, res) => {
   }
    res.status(200).json({category})
 }
+
+exports.delete = async (req, res) => {
+  const id = req.params.id
+  const category = await Category.findByPk(id)
+  if(!category){
+    return res.status(404).json({ msg:"Categoria não encontrada!"})
+  }
+  try {
+    await category.destroy();
+    res.status(200).json({msg: "Categoria excluída!"})
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({msg: 'Erro ao excluir a categoria! Erro:'+error})
+  }
+}

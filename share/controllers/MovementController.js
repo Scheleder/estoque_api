@@ -6,7 +6,7 @@ const Movement = require('../models/Movement')
 const User = require('../models/User')
 
 exports.create = async(req, res)=>{
-  const {type, quantity, destination, itemId, userId} =  req.body
+  const {type, quantity, destination, itemId, userId, localId} =  req.body
   if(!type){
     return res.status(422).json({ msg:"Tipo de movimentação é obrigatório!"})
   }
@@ -27,6 +27,7 @@ exports.create = async(req, res)=>{
     destination,
     itemId,
     userId,
+    localId
   })
 
   try {
@@ -48,10 +49,25 @@ exports.getAll = async function(req, res){
 
 exports.getOne = async (req, res) => {
   const id = req.params.id
-  const movement = await Movement.findByPk(id, {include: [Item, User]})
+  const movement = await Movement.findByPk(id, {include: [Item, User, Local]})
   if(!movement){
     return res.status(404).json({ msg:"Movimentação não encontrada!"})
   }
   movement.User.password = '********';
    res.status(200).json({movement})
+}
+
+exports.delete = async (req, res) => {
+  const id = req.params.id
+  const movement = await Movement.findByPk(id)
+  if(!movement){
+    return res.status(404).json({ msg:"Movimentação não encontrada!"})
+  }
+  try {
+    await movement.destroy();
+    res.status(200).json({msg: "Movimentação excluída!"})
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({msg: 'Erro ao excluir a movimentação! Erro:'+error})
+  }
 }

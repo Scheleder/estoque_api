@@ -16,6 +16,7 @@ const Category = database.define('Category', {
   },
 }, {
   timestamps: true,
+  paranoid: true
 });  
 
 module.exports = Category;

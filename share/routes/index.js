@@ -91,11 +91,8 @@ router.post('/auth/login', async(req, res)=>{
   
   try {
     const secret = process.env.APP_SECRET
-    const token = jwt.sign({ id: user.id }, secret ) 
-      // Criar uma cópia do objeto user sem o campo 'password'
-    const userWithoutPassword = { ...user };
-    delete userWithoutPassword.password;  
-    return res.status(200).json({msg:"Logado com sucesso!", token, user:userWithoutPassword})
+    const token = jwt.sign({ id: user.id }, secret )  
+    return res.status(200).json({msg:"Logado com sucesso!", token, user:{id:user.id, name:user.name, email:user.email}})
   } catch (error) {
     console.log(error)
     return res.status(500).json({msg: 'Erro ao cadastrar o usuário! Erro:'+error})

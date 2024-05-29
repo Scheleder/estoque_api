@@ -34,6 +34,7 @@ const Item = database.define('Item', {
 },
 }, {
     timestamps: true,
+    paranoid: true
 });
 
 Item.belongsTo(Brand, { constraint:true, foreignKey: 'brandId' });

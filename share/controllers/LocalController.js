@@ -41,9 +41,24 @@ exports.getAll = async function(req, res){
 
 exports.getOne = async (req, res) => {
   const id = req.params.id
-  const local = await Local.findByPk(id, {include: [Item]})
+  const local = await Local.findByPk(id, {include: [Item, Movement]})
   if(!local){
     return res.status(404).json({ msg:"Local não encontrado!" })
   }
    res.status(200).json({local})
+}
+
+exports.delete = async (req, res) => {
+  const id = req.params.id
+  const local = await Local.findByPk(id)
+  if(!local){
+    return res.status(404).json({ msg:"Local não encontrado!"})
+  }
+  try {
+    await local.destroy();
+    res.status(200).json({msg: "Local excluído!"})
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({msg: 'Erro ao excluir o local! Erro:'+error})
+  }
 }

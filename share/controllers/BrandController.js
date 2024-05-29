@@ -49,3 +49,18 @@ exports.getOne = async (req, res) => {
   }
    res.status(200).json({brand})
 }
+
+exports.delete = async (req, res) => {
+  const id = req.params.id
+  const brand = await Brand.findByPk(id)
+  if(!brand){
+    return res.status(404).json({ msg:"Fabricante não encontrado!"})
+  }
+  try {
+    await brand.destroy();
+    res.status(200).json({msg: "Fabricante excluído!"})
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({msg: 'Erro ao excluir o fabricante! Erro:'+error})
+  }
+}

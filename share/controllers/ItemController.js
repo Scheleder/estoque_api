@@ -57,3 +57,18 @@ exports.getOne = async (req, res) => {
   }
    res.status(200).json({item})
 }
+
+exports.delete = async (req, res) => {
+  const id = req.params.id
+  const item = await Item.findByPk(id)
+  if(!item){
+    return res.status(404).json({ msg:"Item não encontrado!"})
+  }
+  try {
+    await item.destroy();
+    res.status(200).json({msg: "Item excluído!"})
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({msg: 'Erro ao excluir o item! Erro:'+error})
+  }
+}

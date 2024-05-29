@@ -14,6 +14,7 @@ const User = database.define('User', {
     }
 }, {
   timestamps: true,
+  paranoid: true
 });
 
 module.exports = User;

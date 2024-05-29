@@ -25,3 +25,18 @@ exports.getAll = async (req,res)=>{
       }
       return res.send(users)
 }
+
+exports.delete = async (req, res) => {
+  const id = req.params.id
+  const user = await User.findByPk(id)
+  if(!user){
+    return res.status(404).json({ msg:"Usuário não encontrado!"})
+  }
+  try {
+    await user.destroy();
+    res.status(200).json({msg: "Usuário excluído!"})
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({msg: 'Erro ao excluir o usuário! Erro:'+error})
+  }
+}

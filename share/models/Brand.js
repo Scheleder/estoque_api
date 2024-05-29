@@ -22,6 +22,7 @@ const Brand = database.define('Brand', {
   },
 }, {
   timestamps: true,
+  paranoid: true
 });
   
 
