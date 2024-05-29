@@ -62,3 +62,34 @@ exports.delete = async (req, res) => {
     return res.status(500).json({msg: 'Erro ao excluir a categoria! Erro:'+error})
   }
 }
+
+exports.update = async(req, res)=>{
+  const {name} =  req.body
+  const id = req.params.id;
+
+  if(!name){
+    return res.status(422).json({ msg:"Nome é obrigatório!"})
+  }
+  
+  const category = await Category.findByPk(id);
+  if (!category) {
+    return res.status(404).json({ msg: "Categoria não encontrada!" });
+  }
+  //CHECK NAME
+  const nameExists = await Category.findOne({ where: { name: name } });
+  if(nameExists && nameExists.id != category.id){
+    return res.status(422).json({ msg:"Este nome já está cadastrado!"})
+  }
+
+  const updatedFields = {
+    name: name || category.name,
+  };
+
+  try {
+    await category.update(updatedFields)
+    return res.status(200).json({ msg: "Categoria atualizada com sucesso!", category: category });
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({msg: 'Erro ao atualizar a categoria! Erro:'+error})
+  }
+}

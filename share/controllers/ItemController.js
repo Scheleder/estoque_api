@@ -72,3 +72,45 @@ exports.delete = async (req, res) => {
     return res.status(500).json({msg: 'Erro ao excluir o item! Erro:'+error})
   }
 }
+
+exports.update = async(req, res)=>{
+  const {description, barcode, quantity, minimum, adress, brandId, localId, categoryId} =  req.body
+  const id = req.params.id;
+
+  if(!description){
+    return res.status(422).json({ msg:"Descrição é obrigatória!"})
+  }
+  if(!adress){
+    return res.status(422).json({ msg:"Endereço de estoque é obrigatório!"})
+  }
+
+  const item = await Item.findByPk(id)
+  if(!item){
+    return res.status(404).json({ msg:"Item não encontrado!"})
+  }
+
+  //CHECK DESCRIPTION
+  const nameExists = await Item.findOne({ where: { description: description } });
+  if(nameExists && nameExists.id != item.id){
+    return res.status(422).json({ msg:"Este item já está cadastrado!"})
+  }
+
+  const updatedFields = {
+    description: description || item.description, 
+    adress: adress || item.adress,
+    barcode: barcode || item.barcode,
+    quantity: quantity || item.quantity || 0,
+    minimum: minimum || item.minimum || 0,
+    brandId: brandId || item.brandId || 1,
+    localId: localId || item.localId || 1,
+    categoryId: categoryId || item.categoryId || 1,
+  };
+
+  try {
+    await item.update(updatedFields)
+    return res.status(200).json({ msg: "Item atualizado com sucesso!", item: item });
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({msg: 'Erro ao atualizar o item! Erro:'+error})
+  }
+}
