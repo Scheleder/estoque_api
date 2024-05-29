@@ -7,11 +7,12 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User')
 
 ////ROTAS//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-const UserRouter = require('./UserRouter');
 const BrandRouter = require('./BrandRouter');
+const CategoryRouter = require('./CategoryRouter');
 const ItemRouter = require('./ItemRouter');
 const LocalRouter = require('./LocalRouter');
 const MovementRouter = require('./MovementRouter');
+const UserRouter = require('./UserRouter');
 
 ////LOG////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 router.use((req, res, next) => {
@@ -120,10 +121,11 @@ checkToken = function(req, res, next){
 }
 
 ////PRIVATE ROUTES/////////////////////////////////////////////////////////////////////////////////////////////////////
-router.use('/users', checkToken, UserRouter);
 router.use('/brands', checkToken, BrandRouter);
+router.use('/categories', checkToken, CategoryRouter);
 router.use('/items', checkToken, ItemRouter);
 router.use('/locals', checkToken, LocalRouter);
 router.use('/movements', checkToken, MovementRouter);
+router.use('/users', checkToken, UserRouter);
 
 module.exports = router;

@@ -1,4 +1,5 @@
 const Brand = require('../models/Brand')
+const Category = require('../models/Category')
 const Item = require('../models/Item')
 const Local = require('../models/Local')
 const Movement = require('../models/Movement')
@@ -48,9 +49,9 @@ exports.getAll = async function(req, res){
 exports.getOne = async (req, res) => {
   const id = req.params.id
   const movement = await Movement.findByPk(id, {include: [Item, User]})
-  movement.User.password = '********';
   if(!movement){
     return res.status(404).json({ msg:"Movimentação não encontrada!"})
   }
+  movement.User.password = '********';
    res.status(200).json({movement})
 }

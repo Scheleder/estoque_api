@@ -1,4 +1,5 @@
 const Brand = require('../models/Brand')
+const Category = require('../models/Category')
 const Item = require('../models/Item')
 const Local = require('../models/Local')
 const Movement = require('../models/Movement')

@@ -1,4 +1,5 @@
 const Brand = require('../models/Brand')
+const Category = require('../models/Category')
 const Item = require('../models/Item')
 const Local = require('../models/Local')
 const Movement = require('../models/Movement')
@@ -33,7 +34,7 @@ exports.create = async(req, res)=>{
 exports.getAll = async function(req, res){
   const locals = await Local.findAll()
   if(locals.length == 0){
-    return res.status(204).json({ msg:"Nenhum fabricante cadastrado!" })
+    return res.status(204).json({ msg:"Nenhum local cadastrado!" })
   }
   return res.send(locals)
 }

@@ -23,7 +23,7 @@ const database = new Sequelize(db_name, db_user, db_pass, {
       database.authenticate();
       console.log(chalk.blue("mySQL connected successfully!"));
       //CREATE DATABASE
-      //  database.sync({ force: true }).then(() => {
+      //  database.sync({force:true}).then(() => {
       //    console.log("Drop and re-sync database.");
       //  });
     } catch (error) {

@@ -1,11 +1,12 @@
 const Brand = require('../models/Brand')
+const Category = require('../models/Category')
 const Item = require('../models/Item')
 const Local = require('../models/Local')
 const Movement = require('../models/Movement')
 const User = require('../models/User')
 
 exports.create = async(req, res)=>{
-  const {description, barcode, quantity, minimum, adress, localId, brandId} =  req.body
+  const {description, barcode, quantity, minimum, adress, localId, brandId, categoryId} =  req.body
   if(!description){
     return res.status(422).json({ msg:"Descrição é obrigatória!"})
   }
@@ -28,6 +29,7 @@ exports.create = async(req, res)=>{
     minimum: minimum ? minimum : 0,
     brandId: brandId ? brandId : 1,
     localId: localId ? localId : 1,
+    categoryId: categoryId ? categoryId : 1,
   })
 
   try {
@@ -49,7 +51,7 @@ exports.getAll = async function(req, res){
 
 exports.getOne = async (req, res) => {
   const id = req.params.id
-  const item = await Item.findByPk(id, {include: [Brand]})
+  const item = await Item.findByPk(id, {include: [Brand, Category]})
   if(!item){
     return res.status(404).json({ msg:"Item não encontrado!"})
   }

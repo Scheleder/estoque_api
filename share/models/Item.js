@@ -2,6 +2,7 @@ const { Sequelize, DataTypes } = require('sequelize');
 const database = require('../db');
 const Local = require('../models/Local')
 const Brand = require('../models/Brand')
+const Category = require('../models/Category')
 
 const Item = database.define('Item', {
     description: {
@@ -37,7 +38,9 @@ const Item = database.define('Item', {
 
 Item.belongsTo(Brand, { constraint:true, foreignKey: 'brandId' });
 Item.belongsTo(Local, { constraint:true, foreignKey: 'localId' });
+Item.belongsTo(Category, { constraint:true, foreignKey: 'categoryId' });
 Brand.hasMany(Item, { foreignKey: 'brandId' });
 Local.hasMany(Item, { foreignKey: 'localId' });
+Category.hasMany(Item, { foreignKey: 'categoryId' });
 
 module.exports = Item;
