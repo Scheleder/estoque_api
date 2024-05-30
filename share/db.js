@@ -16,7 +16,9 @@ const db_type = process.env.DB_DATATYPE;
 
 const database = new Sequelize(db_name, db_user, db_pass, {
     host: db_host,
-    dialect: db_type
+    dialect: db_type,
+    //dialectOptions: { useUTC: false },
+    //timezone: '-03:00' //for writing to database
   });
     
   try {

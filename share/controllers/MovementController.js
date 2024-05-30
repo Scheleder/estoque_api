@@ -1,3 +1,5 @@
+const moment = require('moment-timezone');
+const { Op } = require('sequelize');
 const Brand = require('../models/Brand')
 const Category = require('../models/Category')
 const Item = require('../models/Item')
@@ -39,21 +41,90 @@ exports.create = async (req, res) => {
   }
 }
 
-exports.getAll = async function (req, res) {
-  const movements = await Movement.findAll()
-  if (movements.length == 0) {
-    return res.status(204).json({ msg: "Nenhuma movimentação cadastrada!" })
+
+exports.getAll = async function(req, res) {
+  const { description, barcode, address, localId, brandId, categoryId, dataIni, dataFim } = req.query;
+
+  let filter = {};
+
+  if (description) {
+    filter.description = { [Op.like]: `%${description}%` };
   }
-  return res.send(movements)
+  if (barcode) {
+    filter.barcode = barcode;
+  }
+  if (address) {
+    filter.address = { [Op.like]: `%${address}%` };
+  }
+  if (localId) {
+    filter.localId = localId;
+  }
+  if (brandId) {
+    filter.brandId = brandId;
+  }
+  if (categoryId) {
+    filter.categoryId = categoryId;
+  }
+
+  if (dataIni && dataFim) {
+    const startDate = moment.tz(dataIni, "YYYY-MM-DD", 'America/Sao_Paulo').startOf('day').format();
+    const endDate = moment.tz(dataFim, "YYYY-MM-DD", 'America/Sao_Paulo').endOf('day').format();
+
+    filter.createdAt = {
+      [Op.between]: [startDate, endDate]
+    };
+  } else if (dataIni) {
+    const startDate = moment.tz(dataIni, "YYYY-MM-DD", 'America/Sao_Paulo').startOf('day').format();
+
+    filter.createdAt = {
+      [Op.gte]: startDate
+    };
+  } else if (dataFim) {
+    const endDate = moment.tz(dataFim, "YYYY-MM-DD", 'America/Sao_Paulo').endOf('day').format();
+
+    filter.createdAt = {
+      [Op.lte]: endDate
+    };
+  }
+
+  try {
+    const movements = await Movement.findAll({
+      where: filter,
+      include: [
+        {
+          model: Item
+        },
+        {
+          model: User,
+          attributes: { exclude: ['password'] }
+        }
+      ]
+    });
+
+    return res.send(movements);
+  } catch (error) {
+    return res.status(500).json({ msg: "Erro ao buscar movimentações", error: error.message });
+  }
 }
 
 exports.getOne = async (req, res) => {
   const id = req.params.id
-  const movement = await Movement.findByPk(id, { include: [Item, User, Local] })
+  const movement = await Movement.findByPk(id,
+    {include: [
+      {
+        model: Item
+      },
+      {
+        model: User,
+        attributes: { exclude: ['password'] }
+      }
+    ]}
+  );
+  
   if (!movement) {
     return res.status(404).json({ msg: "Movimentação não encontrada!" })
   }
-  movement.User.password = '********';
+  //movement.User.password = '********';
   res.status(200).json({ movement })
 }
 

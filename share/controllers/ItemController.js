@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const Brand = require('../models/Brand')
 const Category = require('../models/Category')
 const Item = require('../models/Item')
@@ -41,12 +42,40 @@ exports.create = async(req, res)=>{
   }
 }
 
-exports.getAll = async function(req, res){
-  const items = await Item.findAll()
-  if(items.length == 0){
-    return res.status(204).json({ msg:"Nenhum item cadastrado!" })
+
+exports.getAll = async function(req, res) {
+  const { description, barcode, address, localId, brandId, categoryId } = req.query;
+
+  let filter = {};
+
+  if (description) {
+    filter.description = { [Op.like]: `%${description}%` };
   }
-  return res.send(items)
+  if (barcode) {
+    filter.barcode = barcode;
+  }
+  if (address) {
+    filter.address = { [Op.like]: `%${address}%` };
+  }
+  if (localId) {
+    filter.localId = localId;
+  }
+  if (brandId) {
+    filter.brandId = brandId;
+  }
+  if (categoryId) {
+    filter.categoryId = categoryId;
+  }
+
+  try {
+    const items = await Item.findAll({ where: filter, include: [Brand, Category]});
+    if (items.length == 0) {
+      return res.status(204).json({ msg: "Nenhum item cadastrado!" });
+    }
+    return res.send(items);
+  } catch (error) {
+    return res.status(500).json({ msg: "Erro ao buscar itens", error: error.message });
+  }
 }
 
 exports.getOne = async (req, res) => {
