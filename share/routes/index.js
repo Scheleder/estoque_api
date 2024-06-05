@@ -17,7 +17,8 @@ const UserRouter = require('./UserRouter');
 ////LOG////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 router.use((req, res, next) => {
   console.log(chalk.magenta('Requisição -> Hora: '+moment().format("MM/DD/YYYY HH:mm:ss"), " && URL -> "+req.path));
-  console.log(chalk.red('IP: '+req.socket.remoteAddress));
+  //console.log(chalk.red('IP: '+req.socket.remoteAddress));
+  //console.log(req)
   next()
 })
 
