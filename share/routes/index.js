@@ -5,6 +5,7 @@ const chalk = require('chalk');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User')
+const Unity = require('../models/Unity')
 
 ////ROTAS//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const BrandRouter = require('./BrandRouter');
@@ -13,6 +14,7 @@ const ItemRouter = require('./ItemRouter');
 const LocalRouter = require('./LocalRouter');
 const MovementRouter = require('./MovementRouter');
 const UserRouter = require('./UserRouter');
+const UnityRouter = require('./UnityRouter');
 
 ////LOG////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 router.use((req, res, next) => {
@@ -125,5 +127,6 @@ router.use('/items', checkToken, ItemRouter);
 router.use('/locals', checkToken, LocalRouter);
 router.use('/movements', checkToken, MovementRouter);
 router.use('/users', checkToken, UserRouter);
+router.use('/units', checkToken, UnityRouter);
 
 module.exports = router;

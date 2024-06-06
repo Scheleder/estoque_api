@@ -1,4 +1,5 @@
 const bodyParser = require('body-parser');
+const swagger = require('../swagger');
 const router = require('./routes')
 const express = require('express');
 const app = express();
@@ -14,5 +15,6 @@ app.listen(port, ()=>{
     console.log(chalk.blue(`Server running at http://${host}:${port}/`));
 });
 
+swagger(app);
 
 module.exports = app, router;

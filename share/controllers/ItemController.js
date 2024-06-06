@@ -5,9 +5,10 @@ const Item = require('../models/Item')
 const Local = require('../models/Local')
 const Movement = require('../models/Movement')
 const User = require('../models/User')
+const Unity = require('../models/Unity')
 
 exports.create = async(req, res)=>{
-  const {description, barcode, quantity, minimum, adress, localId, brandId, categoryId} =  req.body
+  const {description, barcode, quantity, minimum, adress, localId, brandId, categoryId, unityId} =  req.body
   if(!description){
     return res.status(422).json({ msg:"Descrição é obrigatória!"})
   }
@@ -31,6 +32,7 @@ exports.create = async(req, res)=>{
     brandId: brandId ? brandId : 1,
     localId: localId ? localId : 1,
     categoryId: categoryId ? categoryId : 1,
+    unityId: unityId ? unityId : 1,
   })
 
   try {
@@ -44,7 +46,7 @@ exports.create = async(req, res)=>{
 
 
 exports.getAll = async function(req, res) {
-  const { description, barcode, address, localId, brandId, categoryId } = req.query;
+  const { description, barcode, address, localId, brandId, categoryId, unityId } = req.query;
 
   let filter = {};
 
@@ -66,9 +68,12 @@ exports.getAll = async function(req, res) {
   if (categoryId) {
     filter.categoryId = categoryId;
   }
+  if (unityId) {
+    filter.unityId = unityId;
+  }
 
   try {
-    const items = await Item.findAll({ where: filter, include: [Brand, Category]});
+    const items = await Item.findAll({ where: filter, include: [Brand, Category, Unity]});
     if (items.length == 0) {
       return res.status(204).json({ msg: "Nenhum item cadastrado!" });
     }
@@ -80,7 +85,7 @@ exports.getAll = async function(req, res) {
 
 exports.getOne = async (req, res) => {
   const id = req.params.id
-  const item = await Item.findByPk(id, {include: [Brand, Category]})
+  const item = await Item.findByPk(id, {include: [Brand, Category, Unity]})
   if(!item){
     return res.status(404).json({ msg:"Item não encontrado!"})
   }
@@ -103,7 +108,7 @@ exports.delete = async (req, res) => {
 }
 
 exports.update = async(req, res)=>{
-  const {description, barcode, quantity, minimum, adress, brandId, localId, categoryId} =  req.body
+  const {description, barcode, quantity, minimum, adress, brandId, localId, categoryId, unityId} =  req.body
   const id = req.params.id;
 
   if(!description){
@@ -133,6 +138,7 @@ exports.update = async(req, res)=>{
     brandId: brandId || item.brandId || 1,
     localId: localId || item.localId || 1,
     categoryId: categoryId || item.categoryId || 1,
+    unityId: unityId || item.unityId || 1,
   };
 
   try {
