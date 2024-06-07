@@ -1,7 +1,7 @@
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
+const host = process.env.APP_HOST;
 
-// Configurações para o Swagger
 const swaggerDefinition = {
   openapi: '3.0.0',
   info: {
@@ -11,8 +11,8 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: 'https://estoque.scheleder.com',
-      description: 'Controle de Estoque',
+      url: 'http://localhost:3000',
+      description: 'scheleder.com',
     },
   ],
   components: {
@@ -21,7 +21,7 @@ const swaggerDefinition = {
         type: 'http',
         scheme: 'bearer',
         bearerFormat: 'JWT',
-        description: 'Bearer {token}'
+        description: 'Insira o token no formato: Bearer {token}'
       }
     }
   },
@@ -40,5 +40,13 @@ const options = {
 const swaggerSpec = swaggerJSDoc(options);
 
 module.exports = (app) => {
-  app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+    swaggerOptions: {
+      requestInterceptor: (request) => {
+        //request.headers['Authorization'] = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzE2ODU4MjYyfQ.ZkFHaoiYCTX52O2OL9UYJNRX8M0-izD7OtULQEr6rx4';
+        request.headers['Accept'] = '*/*';
+        return request;
+      }
+    }
+  }));
 };

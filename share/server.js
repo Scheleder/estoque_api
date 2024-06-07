@@ -1,6 +1,7 @@
 const bodyParser = require('body-parser');
 const swagger = require('../swagger');
 const router = require('./routes')
+const cors = require('cors');
 const express = require('express');
 const app = express();
 const chalk = require("chalk");
@@ -11,6 +12,7 @@ const port = process.env.APP_PORT;
 
 app.use(express.json());
 app.use(router);
+app.use(cors())
 app.listen(port, ()=>{
     console.log(chalk.blue(`Server running at http://${host}:${port}/`));
 });
