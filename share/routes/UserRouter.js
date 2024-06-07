@@ -34,6 +34,8 @@ const router = express.Router();
  *                   email:
  *                     type: string
  *                     description: E-mail do usuário
+ */
+
 /**
  * @swagger
  * /users/{id}:
@@ -133,7 +135,6 @@ const router = express.Router();
 
 router.get('/', UserController.getAll);
 router.get('/:id', UserController.getOne);
-//router.post('/', UserController.create);
 router.put('/:id', UserController.update);
 router.delete('/:id', UserController.delete);
 
