@@ -28,7 +28,7 @@ exports.create = async(req, res)=>{
 
   try {
     await unity.save()
-    return res.status(201).json({msg:"Nova Unidade adicionada com sucesso!"})
+    return res.status(201).json({msg:"Nova Unidade adicionada com sucesso!", unity})
   } catch (error) {
     console.log(error)
     return res.status(500).json({msg: 'Erro ao cadastrar a unidade! Erro:'+error})
@@ -37,9 +37,6 @@ exports.create = async(req, res)=>{
 
 exports.getAll = async function(req, res){
   const units = await Unity.findAll()
-  if(units.length == 0){
-    return res.status(204).json({ msg:"Nenhuma unidade cadastrada!" })
-  }
   return res.send(units)
 }
 

@@ -24,7 +24,7 @@ exports.create = async(req, res)=>{
 
   try {
     await local.save()
-    return res.status(201).json({msg:"Novo Local adicionado com sucesso!"})
+    return res.status(201).json({msg:"Novo Local adicionado com sucesso!", local})
   } catch (error) {
     console.log(error)
     return res.status(500).json({msg: 'Erro ao cadastrar o local! Erro:'+error})
@@ -33,9 +33,6 @@ exports.create = async(req, res)=>{
 
 exports.getAll = async function(req, res){
   const locals = await Local.findAll()
-  if(locals.length == 0){
-    return res.status(204).json({ msg:"Nenhum local cadastrado!" })
-  }
   return res.send(locals)
 }
 

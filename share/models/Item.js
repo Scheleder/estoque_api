@@ -1,16 +1,10 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const database = require('../db');
 const Local = require('../models/Local')
-const Brand = require('../models/Brand')
-const Category = require('../models/Category')
-const Unity = require('../models/Unity')
+const Component = require('../models/Component')
 
 const Item = database.define('Item', {
-    description: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    barcode: {
+    adress: {
         type: DataTypes.STRING,
         allowNull: false
     },
@@ -21,9 +15,6 @@ const Item = database.define('Item', {
     minimum: {
         type: DataTypes.DECIMAL(10, 4),
         defaultValue: 0.0000,
-    },
-    adress: {
-        type: DataTypes.STRING
     },
     createdBy: {
         type: DataTypes.INTEGER,
@@ -38,13 +29,9 @@ const Item = database.define('Item', {
     paranoid: true
 });
 
-Item.belongsTo(Brand, { constraint:true, foreignKey: 'brandId' });
 Item.belongsTo(Local, { constraint:true, foreignKey: 'localId' });
-Item.belongsTo(Category, { constraint:true, foreignKey: 'categoryId' });
-Item.belongsTo(Unity, { constraint:true, foreignKey: 'unityId' });
-Brand.hasMany(Item, { foreignKey: 'brandId' });
+Item.belongsTo(Component, { constraint:true, foreignKey: 'componentId' });
 Local.hasMany(Item, { foreignKey: 'localId' });
-Category.hasMany(Item, { foreignKey: 'categoryId' });
-Unity.hasMany(Item, { foreignKey: 'unityId' });
+Component.hasMany(Item, { foreignKey: 'componentId' });
 
 module.exports = Item;

@@ -1,5 +1,6 @@
 const Brand = require('../models/Brand')
 const Category = require('../models/Category')
+const Component = require('../models/Component')
 const Item = require('../models/Item')
 const Local = require('../models/Local')
 const Movement = require('../models/Movement')
@@ -26,7 +27,7 @@ exports.create = async(req, res)=>{
 
   try {
     await brand.save()
-    return res.status(201).json({msg:"Novo Fabricante adicionado com sucesso!"})
+    return res.status(201).json({msg:"Novo Fabricante adicionado com sucesso!", brand})
   } catch (error) {
     console.log(error)
     return res.status(500).json({msg: 'Erro ao cadastrar o fabricante! Erro:'+error})
@@ -35,15 +36,12 @@ exports.create = async(req, res)=>{
 
 exports.getAll = async function(req, res){
   const brands = await Brand.findAll()
-  if(brands.length == 0){
-    return res.status(204).json({ msg:"Nenhum Fabricante cadastrado!" })
-  }
   return res.send(brands)
 }
 
 exports.getOne = async (req, res) => {
   const id = req.params.id
-  const brand = await Brand.findByPk(id, {include: [Item]})
+  const brand = await Brand.findByPk(id, {include: [Component]})
   if(!brand){
     return res.status(404).json({ msg:"Fabricante não encontrado!"})
   }

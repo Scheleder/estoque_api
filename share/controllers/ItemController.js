@@ -6,38 +6,35 @@ const Local = require('../models/Local')
 const Movement = require('../models/Movement')
 const User = require('../models/User')
 const Unity = require('../models/Unity')
+const Component = require('../models/Component')
 
 exports.create = async(req, res)=>{
-  const {description, barcode, quantity, minimum, adress, localId, brandId, categoryId, unityId} =  req.body
-  if(!description){
-    return res.status(422).json({ msg:"Descrição é obrigatória!"})
-  }
+  const {adress, quantity, minimum, localId, componentId} =  req.body
   if(!adress){
     return res.status(422).json({ msg:"Endereço de estoque é obrigatório!"})
   }
+  if(!componentId){
+    return res.status(422).json({ msg:"Componente é obrigatório!"})
+  }
 
   //CHECK ITEM
-  const itemExists = await Item.findOne({ where: { description: description } });
+  const itemExists = await Item.findOne({ where: { adress: adress } });
   if(itemExists){
-    return res.status(422).json({ msg:"Este Item já está cadastrado!"})
+    return res.status(422).json({ msg:"Este endereço de estoque já está ocupado!"})
   }
 
   //CREATE ITEM
   const item = new Item({
-    description, 
     adress,
-    barcode,
     quantity: quantity ? quantity : 0,
     minimum: minimum ? minimum : 0,
-    brandId: brandId ? brandId : 1,
     localId: localId ? localId : 1,
-    categoryId: categoryId ? categoryId : 1,
-    unityId: unityId ? unityId : 1,
+    componentId: componentId ? componentId : 1,
   })
 
   try {
     await item.save()
-    return res.status(201).json({msg:"Novo item adicionado com sucesso!"})
+    return res.status(201).json({msg:"Novo item adicionado com sucesso!", item})
   } catch (error) {
     console.log(error)
     return res.status(500).json({msg: 'Erro ao cadastrar o item! Erro:'+error})
@@ -46,37 +43,22 @@ exports.create = async(req, res)=>{
 
 
 exports.getAll = async function(req, res) {
-  const { description, barcode, address, localId, brandId, categoryId, unityId } = req.query;
+  const { address, localId, componentId } = req.query;
 
   let filter = {};
 
-  if (description) {
-    filter.description = { [Op.like]: `%${description}%` };
-  }
-  if (barcode) {
-    filter.barcode = barcode;
-  }
   if (address) {
     filter.address = { [Op.like]: `%${address}%` };
   }
   if (localId) {
     filter.localId = localId;
   }
-  if (brandId) {
-    filter.brandId = brandId;
-  }
-  if (categoryId) {
-    filter.categoryId = categoryId;
-  }
-  if (unityId) {
-    filter.unityId = unityId;
+  if (componentId) {
+    filter.componentId = componentId;
   }
 
   try {
-    const items = await Item.findAll({ where: filter, include: [Brand, Category, Unity]});
-    if (items.length == 0) {
-      return res.status(204).json({ msg: "Nenhum item cadastrado!" });
-    }
+    const items = await Item.findAll({ where: filter, include: [Component, Local]});
     return res.send(items);
   } catch (error) {
     return res.status(500).json({ msg: "Erro ao buscar itens", error: error.message });
@@ -85,7 +67,7 @@ exports.getAll = async function(req, res) {
 
 exports.getOne = async (req, res) => {
   const id = req.params.id
-  const item = await Item.findByPk(id, {include: [Brand, Category, Unity]})
+  const item = await Item.findByPk(id, {include: [Component, Local]})
   if(!item){
     return res.status(404).json({ msg:"Item não encontrado!"})
   }
@@ -108,11 +90,11 @@ exports.delete = async (req, res) => {
 }
 
 exports.update = async(req, res)=>{
-  const {description, barcode, quantity, minimum, adress, brandId, localId, categoryId, unityId} =  req.body
+  const {adress, quantity, minimum,  componentId, localId } =  req.body
   const id = req.params.id;
 
-  if(!description){
-    return res.status(422).json({ msg:"Descrição é obrigatória!"})
+  if(!componentId){
+    return res.status(422).json({ msg:"Componente é obrigatório!"})
   }
   if(!adress){
     return res.status(422).json({ msg:"Endereço de estoque é obrigatório!"})
@@ -124,21 +106,17 @@ exports.update = async(req, res)=>{
   }
 
   //CHECK DESCRIPTION
-  const nameExists = await Item.findOne({ where: { description: description } });
+  const nameExists = await Item.findOne({ where: { adress: adress } });
   if(nameExists && nameExists.id != item.id){
     return res.status(422).json({ msg:"Este item já está cadastrado!"})
   }
 
   const updatedFields = {
-    description: description || item.description, 
     adress: adress || item.adress,
-    barcode: barcode || item.barcode,
     quantity: quantity || item.quantity || 0,
     minimum: minimum || item.minimum || 0,
-    brandId: brandId || item.brandId || 1,
+    componentId: componentId || item.componentId || 1,
     localId: localId || item.localId || 1,
-    categoryId: categoryId || item.categoryId || 1,
-    unityId: unityId || item.unityId || 1,
   };
 
   try {

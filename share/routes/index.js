@@ -5,11 +5,11 @@ const chalk = require('chalk');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User')
-const Unity = require('../models/Unity')
 
 ////ROTAS//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const BrandRouter = require('./BrandRouter');
 const CategoryRouter = require('./CategoryRouter');
+const ComponentRouter = require('./ComponentRouter');
 const ItemRouter = require('./ItemRouter');
 const LocalRouter = require('./LocalRouter');
 const MovementRouter = require('./MovementRouter');
@@ -68,6 +68,43 @@ router.post('/auth/register', async(req, res)=>{
   }
 
 })
+
+/**
+ * @swagger
+ * tags:
+ *   name: Authentication
+ *   description: Autenticação
+ */
+/**
+ * @swagger
+ * /auth/login:
+ *   post:
+ *     summary: Autenticação de usuário
+ *     tags: [Authentication]
+ *     description: Autentica um usuário e retorna um token de acesso
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               senha:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Token de acesso gerado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ */
+
 
 ////LOGIN//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 router.post('/auth/login', async(req, res)=>{
@@ -128,5 +165,6 @@ router.use('/locals', checkToken, LocalRouter);
 router.use('/movements', checkToken, MovementRouter);
 router.use('/users', checkToken, UserRouter);
 router.use('/units', checkToken, UnityRouter);
+router.use('/components', checkToken, ComponentRouter);
 
 module.exports = router;

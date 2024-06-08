@@ -28,12 +28,6 @@ const router = express.Router();
  *                   id:
  *                     type: integer
  *                     description: ID do item
- *                   description:
- *                     type: string
- *                     description: Descrição do item
- *                   barcode:
- *                     type: string
- *                     description: Código de barras do item
  *                   address:
  *                     type: string
  *                     description: Endereço de estoque do item
@@ -55,18 +49,10 @@ const router = express.Router();
  *           schema:
  *             type: object
  *             required:
- *               - description
- *               - barcode
  *               - address
  *               - quantity
  *               - minimum
  *             properties:
- *               description:
- *                 type: string
- *                 description: Descrição do item
- *               barcode:
- *                 type: string
- *                 description: Código de barras do item
  *               address:
  *                 type: string
  *                 description: Endereço de estoque do item
@@ -89,12 +75,6 @@ const router = express.Router();
  *                 id:
  *                   type: integer
  *                   description: ID do novo item
- *                 description:
- *                   type: string
- *                   description: Descrição do item
- *                 barcode:
- *                   type: string
- *                   description: Código de barras do item
  *                 address:
  *                   type: string
  *                   description: Endereço de estoque do item
@@ -132,12 +112,6 @@ const router = express.Router();
  *                 id:
  *                   type: integer
  *                   description: ID do item
- *                 description:
- *                   type: string
- *                   description: Descrição do item
- *                 barcode:
- *                   type: string
- *                   description: Código de barras do item
  *                 address:
  *                   type: string
  *                   description: Endereço de estoque do item
@@ -173,12 +147,6 @@ const router = express.Router();
  *           schema:
  *             type: object
  *             properties:
- *               description:
- *                 type: string
- *                 description: Descrição do item
- *               barcode:
- *                 type: string
- *                 description: Código de barras do item
  *               address:
  *                 type: string
  *                 description: Endereço de estoque do item
@@ -201,12 +169,6 @@ const router = express.Router();
  *                 id:
  *                   type: integer
  *                   description: ID do item atualizado
- *                 description:
- *                   type: string
- *                   description: Descrição do item atualizado
- *                 barcode:
- *                   type: string
- *                   description: Código de barras do item atualizado
  *                 address:
  *                   type: string
  *                   description: Endereço de estoque do item atualizado

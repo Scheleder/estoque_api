@@ -20,9 +20,6 @@ exports.getAll = async (req,res)=>{
     const users = await User.findAll({
         attributes: { exclude: ['password'] } // Exclui o campo 'password'
       })
-      if(users.length == 0){
-        return res.status(204).json({ msg:"Nenhum usuário cadastrado!" })
-      }
       return res.send(users)
 }
 

@@ -34,7 +34,7 @@ exports.create = async (req, res) => {
 
   try {
     await movement.save()
-    return res.status(201).json({ msg: 'OK' })
+    return res.status(201).json({ msg: 'OK', movement })
   } catch (error) {
     console.log(error)
     return res.status(500).json({ msg: 'FAIL' })
