@@ -1,0 +1,1323 @@
+openapi: 3.0.0
+info:
+  title: API Estoque
+  version: 1.0.0
+  description: API para Gerenciamento de Estoques.
+
+servers:
+  - url: http://estoque.scheleder.com/
+
+tags:
+  - name: Authentication
+    description: Autenticação do sistema
+  - name: Registration
+    description: Cadastramento do sistema
+  - name: Brands
+    description: Gerenciamento de Marcas
+  - name: Categories
+    description: Gerenciamento de Categorias
+  - name: Components
+    description: Gerenciamento de Componentes
+  - name: Items
+    description: Gerenciamento de Items de Estoque
+  - name: Locals
+    description: Gerenciamento de Locais Físicos
+  - name: Movements
+    description: Gerenciamento de MOvimentações de Estoque
+  - name: Units
+    description: Gerenciamento de Unidades de Medida
+  - name: Users
+    description: Gerenciamento de Usuários
+
+paths:
+  /auth/login:
+    post:
+      summary: Autenticação de usuário
+      tags: [Authentication]
+      description: Autentica um usuário e retorna um token de acesso
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        200:
+          description: Token de acesso gerado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+
+  /auth/register:
+    post:
+      summary: Cadastro de usuário
+      tags: [Registration]
+      description: Cadastra o usuário no sistema
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                confirmpassword:
+                  type: string
+      responses:
+        200:
+          description: Cadastro realizado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+
+  /brands:
+    get:
+      summary: Retorna a lista de todas as marcas
+      tags: [Brands]
+      responses:
+        200:
+          description: Lista de marcas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: ID da marca
+                    name:
+                      type: string
+                      description: Nome da marca
+                    website:
+                      type: string
+                      description: Website da marca
+                    logo:
+                      type: string
+                      description: Imagem da marca
+    post:
+      summary: Cria uma nova marca
+      tags: [Brands]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Nome da marca
+                website:
+                  type: string
+                  description: Website da marca
+                logo:
+                  type: string
+                  description: Imagem da marca
+      responses:
+        201:
+          description: Marca criada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: ID da nova marca
+                  name:
+                    type: string
+                    description: Nome da nova marca
+                  website:
+                    type: string
+                    description: Website da nova marca
+                  logo:
+                    type: string
+                    description: Imagem da nova marca
+
+  /brands/{id}:
+    get:
+      summary: Retorna uma marca específica por ID
+      tags: [Brands]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID da marca
+      responses:
+        200:
+          description: Marca encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: ID da marca
+                  name:
+                    type: string
+                    description: Nome da marca
+                  website:
+                    type: string
+                    description: Website da marca
+                  logo:
+                    type: string
+                    description: Imagem da marca
+        404:
+          description: Marca não encontrada
+
+    put:
+      summary: Atualiza uma marca existente por ID
+      tags: [Brands]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID da marca a ser atualizada
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Nome da marca
+                website:
+                  type: string
+                  description: Website da marca
+                logo:
+                  type: string
+                  description: Imagem da marca
+      responses:
+        200:
+          description: Marca atualizada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: ID da marca atualizada
+                  name:
+                    type: string
+                    description: Nome da marca atualizada
+                  website:
+                    type: string
+                    description: Website da marca atualizada
+                  logo:
+                    type: string
+                    description: Imagem da marca atualizada
+        404:
+          description: Marca não encontrada
+
+    delete:
+      summary: Deleta uma marca por ID
+      tags: [Brands]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID da marca a ser deletada
+      responses:
+        204:
+          description: Marca deletada com sucesso
+        404:
+          description: Marca não encontrada
+
+  /categories:
+    get:
+      summary: Retorna a lista de todas as categorias
+      tags: [Categories]
+      responses:
+        200:
+          description: Lista de categorias
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: ID da categoria
+                    name:
+                      type: string
+                      description: Nome da categoria
+    post:
+      summary: Cria uma nova categoria
+      tags: [Categories]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Nome da categoria
+      responses:
+        201:
+          description: Categoria criada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: ID da nova categoria
+                  name:
+                    type: string
+                    description: Nome da nova categoria
+
+  /categories/{id}:
+    get:
+      summary: Retorna uma categoria específica por ID
+      tags: [Categories]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID da categoria
+      responses:
+        200:
+          description: Categoria encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: ID da categoria
+                  name:
+                    type: string
+                    description: Nome da categoria
+        404:
+          description: Categoria não encontrada
+
+    put:
+      summary: Atualiza uma categoria existente por ID
+      tags: [Categories]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID da categoria a ser atualizada
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Nome da categoria
+      responses:
+        200:
+          description: Categoria atualizada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: ID da categoria atualizada
+                  name:
+                    type: string
+                    description: Nome da categoria atualizada
+        404:
+          description: Categoria não encontrada
+
+    delete:
+      summary: Deleta uma categoria por ID
+      tags: [Categories]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID da categoria a ser deletada
+      responses:
+        204:
+          description: Categoria deletada com sucesso
+        404:
+          description: Categoria não encontrada
+
+  /components:
+    get:
+      summary: Retorna a lista de todos os componentes
+      tags: [Components]
+      responses:
+        200:
+          description: Lista de componentes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: ID do componente
+                    description:
+                      type: string
+                      description: Descrição do componente
+                    barcode:
+                      type: string
+                      description: Código de barras do componente
+                    sku:
+                      type: string
+                      description: Código SKU do componente
+
+    post:
+      summary: Cria um novo componente
+      tags: [Components]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - description
+                - barcode
+                - sku
+              properties:
+                description:
+                  type: string
+                  description: Descrição do componente
+                barcode:
+                  type: string
+                  description: Código de barras do componente
+                sku:
+                  type: string
+                  description: Código SKU do componente
+      responses:
+        201:
+          description: Componente criado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: ID do novo componente
+                  description:
+                    type: string
+                    description: Descrição do componente
+                  barcode:
+                    type: string
+                    description: Código de barras do componente
+                  sku:
+                    type: string
+                    description: Código SKU do componente
+
+  /components/{id}:
+    get:
+      summary: Retorna um componente específico por ID
+      tags: [Components]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID do componente
+      responses:
+        200:
+          description: Componente encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: ID do componente
+                  description:
+                    type: string
+                    description: Descrição do componente
+                  barcode:
+                    type: string
+                    description: Código de barras do componente
+                  sku:
+                    type: string
+                    description: Código SKU do componente
+        404:
+          description: Componente não encontrado
+
+    put:
+      summary: Atualiza um componente existente por ID
+      tags: [Components]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID do componente a ser atualizado
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                  description: Descrição do componente
+                barcode:
+                  type: string
+                  description: Código de barras do componente
+                sku:
+                  type: string
+                  description: Código SKU do componente
+      responses:
+        200:
+          description: Componente atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: ID do componente atualizado
+                  description:
+                    type: string
+                    description: Descrição do componente atualizado
+                  barcode:
+                    type: string
+                    description: Código de barras do componente atualizado
+                  sku:
+                    type: string
+                    description: Código SKU do componente atualizado
+        404:
+          description: Componente não encontrado
+
+    delete:
+      summary: Deleta um componente por ID
+      tags: [Components]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID do componente a ser deletado
+      responses:
+        204:
+          description: Componente deletado com sucesso
+        404:
+          description: Componente não encontrado
+
+  /items:
+    get:
+      summary: Retorna a lista de todos os itens
+      tags: [Items]
+      responses:
+        200:
+          description: Lista de itens
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: ID do item
+                    address:
+                      type: string
+                      description: Endereço de estoque do item
+                    quantity:
+                      type: number
+                      format: float
+                      description: Quantidade em estoque do item
+                    minimum:
+                      type: number
+                      format: float
+                      description: Quantidade mínima do item
+
+    post:
+      summary: Cria um novo item
+      tags: [Items]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - address
+                - quantity
+                - minimum
+              properties:
+                address:
+                  type: string
+                  description: Endereço de estoque do item
+                quantity:
+                  type: number
+                  format: float
+                  description: Quantidade em estoque do item
+                minimum:
+                  type: number
+                  format: float
+                  description: Quantidade mínima do item
+      responses:
+        201:
+          description: Item criado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: ID do novo item
+                  address:
+                    type: string
+                    description: Endereço de estoque do item
+                  quantity:
+                    type: number
+                    format: float
+                    description: Quantidade em estoque do item
+                  minimum:
+                    type: number
+                    format: float
+                    description: Quantidade mínima do item
+
+  /items/{id}:
+    get:
+      summary: Retorna um item específico por ID
+      tags: [Items]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID do item
+      responses:
+        200:
+          description: Item encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: ID do item
+                  address:
+                    type: string
+                    description: Endereço de estoque do item
+                  quantity:
+                    type: number
+                    format: float
+                    description: Quantidade em estoque do item
+                  minimum:
+                    type: number
+                    format: float
+                    description: Quantidade mínima do item
+        404:
+          description: Item não encontrado
+
+    put:
+      summary: Atualiza um item existente por ID
+      tags: [Items]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID do item a ser atualizado
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                address:
+                  type: string
+                  description: Endereço de estoque do item
+                quantity:
+                  type: number
+                  format: float
+                  description: Quantidade em estoque do item
+                minimum:
+                  type: number
+                  format: float
+                  description: Quantidade mínima do item
+      responses:
+        200:
+          description: Item atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: ID do item atualizado
+                  address:
+                    type: string
+                    description: Endereço de estoque do item atualizado
+                  quantity:
+                    type: number
+                    format: float
+                    description: Quantidade em estoque do item atualizado
+                  minimum:
+                    type: number
+                    format: float
+                    description: Quantidade mínima do item atualizado
+        404:
+          description: Item não encontrado
+
+    delete:
+      summary: Deleta um item por ID
+      tags: [Items]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID do item a ser deletado
+      responses:
+        204:
+          description: Item deletado com sucesso
+        404:
+          description: Item não encontrado
+
+  /locals:
+    get:
+      summary: Retorna a lista de todos os locais
+      tags: [Locals]
+      responses:
+        200:
+          description: Lista de locais
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: ID do local
+                    name:
+                      type: string
+                      description: Nome do local
+
+    post:
+      summary: Cria um novo local
+      tags: [Locals]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                  description: Nome do local
+      responses:
+        201:
+          description: Local criado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: ID do novo local
+                  name:
+                    type: string
+                    description: Nome do local
+
+  /locals/{id}:
+    get:
+      summary: Retorna um local específico por ID
+      tags: [Locals]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID do local
+      responses:
+        200:
+          description: Local encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: ID do local
+                  name:
+                    type: string
+                    description: Nome do local
+        404:
+          description: Local não encontrado
+
+    put:
+      summary: Atualiza um local existente por ID
+      tags: [Locals]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID do local a ser atualizado
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                  description: Nome do local
+      responses:
+        200:
+          description: Local atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: ID do local atualizado
+                  name:
+                    type: string
+                    description: Nome do local atualizado
+        404:
+          description: Local não encontrado
+
+    delete:
+      summary: Deleta um local por ID
+      tags: [Locals]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID do local a ser deletado
+      responses:
+        204:
+          description: Local deletado com sucesso
+        404:
+          description: Local não encontrado
+
+  /movements:
+    get:
+      summary: Retorna a lista de todas as movimentações
+      tags: [Movements]
+      responses:
+        200:
+          description: Lista de movimentações
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: ID da movimentação
+                    type:
+                      type: string
+                      description: Tipo de movimentação
+                    destination:
+                      type: string
+                      description: Destino ou documento associado
+                    quantity:
+                      type: number
+                      format: float
+                      description: Quantidade da movimentação
+
+    post:
+      summary: Cria uma nova movimentação de estoque
+      tags: [Movements]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - type
+                - destination
+                - quantity
+              properties:
+                type:
+                  type: string
+                  description: Tipo de movimentação (por exemplo, entrada, saída)
+                destination:
+                  type: string
+                  description: Destino ou documento associado à movimentação
+                quantity:
+                  type: number
+                  format: float
+                  description: Quantidade da movimentação
+      responses:
+        201:
+          description: Movimentação criada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: ID da nova movimentação
+                  type:
+                    type: string
+                    description: Tipo de movimentação
+                  destination:
+                    type: string
+                    description: Destino ou documento associado
+                  quantity:
+                    type: number
+                    format: float
+                    description: Quantidade da movimentação
+
+  /movements/{id}:
+    get:
+      summary: Retorna uma movimentação específica por ID
+      tags: [Movements]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID da movimentação
+      responses:
+        200:
+          description: Movimentação encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: ID da movimentação
+                  type:
+                    type: string
+                    description: Tipo de movimentação
+                  destination:
+                    type: string
+                    description: Destino ou documento associado
+                  quantity:
+                    type: number
+                    format: float
+                    description: Quantidade da movimentação
+        404:
+          description: Movimentação não encontrada
+
+    put:
+      summary: Atualiza uma movimentação existente por ID
+      tags: [Movements]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID da movimentação a ser atualizada
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - type
+                - destination
+                - quantity
+              properties:
+                type:
+                  type: string
+                  description: Tipo de movimentação (por exemplo, entrada, saída)
+                destination:
+                  type: string
+                  description: Destino ou documento associado à movimentação
+                quantity:
+                  type: number
+                  format: float
+                  description: Quantidade da movimentação
+      responses:
+        200:
+          description: Movimentação atualizada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: ID da movimentação atualizada
+                  type:
+                    type: string
+                    description: Tipo de movimentação
+                  destination:
+                    type: string
+                    description: Destino ou documento associado
+                  quantity:
+                    type: number
+                    format: float
+                    description: Quantidade da movimentação
+        404:
+          description: Movimentação não encontrada
+
+    delete:
+      summary: Deleta uma movimentação por ID
+      tags: [Movements]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID da movimentação a ser deletada
+      responses:
+        204:
+          description: Movimentação deletada com sucesso
+        404:
+          description: Movimentação não encontrada
+
+  /units:
+    get:
+      summary: Retorna a lista de todas as unidades
+      tags: [Units]
+      responses:
+        200:
+          description: Lista de Unidades
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: ID da unidade
+                    name:
+                      type: string
+                      description: Nome da unidade
+                    abrev:
+                      type: string
+                      description: Abreviatura da unidade
+
+    post:
+      summary: Cria uma nova unidade
+      tags: [Units]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - abrev
+              properties:
+                name:
+                  type: string
+                  description: Nome da unidade
+                abrev:
+                  type: string
+                  description: Abreviatura da unidade
+      responses:
+        201:
+          description: Unidade criada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: ID da nova unidade
+                  name:
+                    type: string
+                    description: Nome da unidade
+                  abrev:
+                    type: string
+                    description: Abreviatura da unidade
+
+  /units/{id}:
+    get:
+      summary: Retorna uma unidade específica por ID
+      tags: [Units]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID da unidade
+      responses:
+        200:
+          description: Unidade encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: ID da unidade
+                  name:
+                    type: string
+                    description: Nome da unidade
+                  abrev:
+                    type: string
+                    description: Abreviatura da unidade
+        404:
+          description: Unidade não encontrada
+
+    put:
+      summary: Atualiza uma unidade existente por ID
+      tags: [Units]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID da unidade a ser atualizada
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - abrev
+              properties:
+                name:
+                  type: string
+                  description: Nome da unidade
+                abrev:
+                  type: string
+                  description: Abreviatura da unidade
+      responses:
+        200:
+          description: Unidade atualizada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: ID da unidade atualizada
+                  name:
+                    type: string
+                    description: Nome da unidade
+                  abrev:
+                    type: string
+                    description: Abreviatura da unidade
+        404:
+          description: Unidade não encontrada
+
+    delete:
+      summary: Deleta uma unidade por ID
+      tags: [Units]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID da unidade a ser deletada
+      responses:
+        204:
+          description: Unidade deletada com sucesso
+        404:
+          description: Unidade não encontrada
+
+  /users:
+    get:
+      summary: Retorna a lista de todos os usuários
+      tags: [Users]
+      responses:
+        200:
+          description: Lista de usuários
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: ID do usuário
+                    name:
+                      type: string
+                      description: Nome do usuário
+                    email:
+                      type: string
+                      description: E-mail do usuário
+
+  /users/{id}:
+    get:
+      summary: Retorna um usuário específico por ID
+      tags: [Users]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID do usuário
+      responses:
+        200:
+          description: Usuário encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: ID do usuário
+                  name:
+                    type: string
+                    description: Nome do usuário
+                  email:
+                    type: string
+                    description: E-mail do usuário
+        404:
+          description: Usuário não encontrado
+
+    put:
+      summary: Atualiza um usuário existente por ID
+      tags: [Users]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID do usuário a ser atualizado
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - email
+              properties:
+                name:
+                  type: string
+                  description: Nome do usuário
+                email:
+                  type: string
+                  description: E-mail do usuário
+                password:
+                  type: string
+                  description: Senha do usuário (opcional)
+      responses:
+        200:
+          description: Usuário atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: ID do usuário atualizado
+                  name:
+                    type: string
+                    description: Nome do usuário
+                  email:
+                    type: string
+                    description: E-mail do usuário
+        404:
+          description: Usuário não encontrado
+
+    delete:
+      summary: Deleta um usuário por ID
+      tags: [Users]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID do usuário a ser deletado
+      responses:
+        204:
+          description: Usuário deletado com sucesso
+        404:
+          description: Usuário não encontrado

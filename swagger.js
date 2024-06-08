@@ -34,7 +34,7 @@ const swaggerDefinition = {
 
 const options = {
   swaggerDefinition,
-  apis: ['./share/routes/*.js'], // Caminho para os arquivos que contém as definições da API
+  apis: ['./share/docs/tags.yaml'], // Caminho para os arquivos que contém as definições da API
 };
 
 const swaggerSpec = swaggerJSDoc(options);
