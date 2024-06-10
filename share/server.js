@@ -12,10 +12,9 @@ const port = process.env.APP_PORT;
 
 app.use(express.json());
 app.use(router);
-//app.use(cors())
 
 app.use(cors({
-    origin: `http://${host}:${port}` // ou outro domínio permitido
+    origin: `http://${host}:${port}`
   }));
 
 app.listen(port, ()=>{
