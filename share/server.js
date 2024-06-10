@@ -15,7 +15,7 @@ app.use(router);
 //app.use(cors())
 
 app.use(cors({
-    origin: 'http://localhost:3000' // ou outro domínio permitido
+    origin: `http://${host}:${port}` // ou outro domínio permitido
   }));
 
 app.listen(port, ()=>{

@@ -1,6 +1,9 @@
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
+require('dotenv').config(); 
+
 const host = process.env.APP_HOST;
+const port = process.env.APP_PORT;
 
 const swaggerDefinition = {
   openapi: '3.0.0',
@@ -11,8 +14,8 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: 'http://localhost:3000',
-      description: 'scheleder.com',
+      url: `http://${host}:${port}`,
+      description: 'API Estoque',
     },
   ],
   components: {
