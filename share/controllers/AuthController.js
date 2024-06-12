@@ -1,13 +1,15 @@
 const User = require('../models/User')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const MailService = require('../services/MailService');
 
 //SEND MAIL
 sendRegistrationMail = function (user){
     if(user){
-        return true;
+        return MailService.sendCodeVerification(user);        
+    }else{
+        return false;
     }
-    return false;
 }
 
 //CREATE RANDOM CODE
