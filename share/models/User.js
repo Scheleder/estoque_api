@@ -11,7 +11,10 @@ const User = database.define('User', {
     },
     password: {
       type: DataTypes.STRING
-    }
+    },
+    code: {
+      type: DataTypes.STRING
+    },
 }, {
   timestamps: true,
   paranoid: true

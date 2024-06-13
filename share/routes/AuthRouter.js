@@ -4,5 +4,8 @@ const router = express.Router();
 
 router.post('/login', AuthController.login);
 router.post('/register', AuthController.register);
+router.post('/confirm', AuthController.checkCode);
+router.post('/reset', AuthController.reset);
+router.post('/update', AuthController.updatePassWord);
 
 module.exports = router;
