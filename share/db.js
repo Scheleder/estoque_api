@@ -21,7 +21,7 @@ const database = new Sequelize(
   db_pass, 
   {
     host: db_host,
-    dialect: db_type,
+    dialect: 'mysql',
     port: db_port,
     //dialectOptions: { useUTC: false },
     //timezone: '-03:00' //for writing to database
