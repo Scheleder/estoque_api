@@ -1,5 +1,5 @@
 {
-  "name": "modelo_mysql",
+  "name": "estoque-backend",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -20,8 +20,8 @@
     "jsonwebtoken": "^9.0.2",
     "mailtrap": "^3.3.0",
     "moment": "^2.29.4",
-    "mysql2": "^2.3.3",
-    "nodemon": "^2.0.20",
+    "mysql2": "^3.10.0",
+    "nodemon": "^3.1.3",
     "sequelize": "^6.25.5",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
