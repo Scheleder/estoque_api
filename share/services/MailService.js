@@ -26,7 +26,7 @@ exports.sendCodeVerification = async (user) => {
       category: "Welcome Email",
     })
     .then(function (results) {
-      console.log(results)
+      //console.log(results)
       return results.success;
     });
 
@@ -49,7 +49,7 @@ exports.sendResetCode = async (user) => {
       category: "Welcome Email",
     })
     .then(function (results) {
-      console.log(results)
+      //console.log(results)
       return results.success;
     });
 

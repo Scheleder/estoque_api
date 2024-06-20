@@ -12,14 +12,21 @@ const db_name = process.env.DB_DATABASE;
 const db_user = process.env.DB_USERNAME;
 const db_pass = process.env.DB_PASSWORD;
 const db_host = process.env.DB_HOSTNAME;
+const db_port = process.env.DB_PORTNUMB;
 const db_type = process.env.DB_DATATYPE;
 
-const database = new Sequelize(db_name, db_user, db_pass, {
+const database = new Sequelize(
+  db_name, 
+  db_user, 
+  db_pass, 
+  {
     host: db_host,
     dialect: db_type,
+    port: db_port,
     //dialectOptions: { useUTC: false },
     //timezone: '-03:00' //for writing to database
-  });
+  }
+);
     
   try {
       database.authenticate();
