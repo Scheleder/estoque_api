@@ -7,6 +7,7 @@ const Local = require('../models/Local')
 const Movement = require('../models/Movement')
 const User = require('../models/User');
 const Component = require('../models/Component');
+const Unity = require('../models/Unity');
 
 exports.create = async (req, res) => {
   const { type, quantity, destination, itemId, userId, localId } = req.body
@@ -94,7 +95,16 @@ exports.getAll = async function(req, res) {
       include: [
         {
           model: Item,
-          include:[{model:Component}]
+          include: [
+            {
+              model: Component,
+              include: [
+                {
+                  model: Unity
+                }
+              ]
+            }
+          ]
         },
         {
           model: User,
@@ -102,8 +112,9 @@ exports.getAll = async function(req, res) {
         }
       ]
     });
-
+    
     return res.send(movements);
+    
   } catch (error) {
     return res.status(500).json({ msg: "Erro ao buscar movimentações", error: error.message });
   }

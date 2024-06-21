@@ -58,7 +58,7 @@ exports.getAll = async function(req, res) {
   }
 
   try {
-    const items = await Item.findAll({ where: filter, include: [Component, Local]});
+    const items = await Item.findAll({ where: filter, include: [{Component, include:{model:Unity}}, Local]});
     return res.send(items);
   } catch (error) {
     return res.status(500).json({ msg: "Erro ao buscar itens", error: error.message });
