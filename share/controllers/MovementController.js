@@ -5,7 +5,8 @@ const Category = require('../models/Category')
 const Item = require('../models/Item')
 const Local = require('../models/Local')
 const Movement = require('../models/Movement')
-const User = require('../models/User')
+const User = require('../models/User');
+const Component = require('../models/Component');
 
 exports.create = async (req, res) => {
   const { type, quantity, destination, itemId, userId, localId } = req.body
@@ -92,7 +93,8 @@ exports.getAll = async function(req, res) {
       where: filter,
       include: [
         {
-          model: Item
+          model: Item,
+          include:[{model:Component}]
         },
         {
           model: User,
