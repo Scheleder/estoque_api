@@ -41,7 +41,20 @@ exports.getAll = async function(req, res){
 
 exports.getOne = async (req, res) => {
   const id = req.params.id
-  const brand = await Brand.findByPk(id, {include: [Component]})
+  const brand = await Brand.findByPk(id, 
+    {
+      include: [
+        {
+          model: Component,
+          include: [
+            {
+              model: Category
+            }
+          ]
+        }
+      ]
+    }
+    )
   if(!brand){
     return res.status(404).json({ msg:"Fabricante não encontrado!"})
   }
