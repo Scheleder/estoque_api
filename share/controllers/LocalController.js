@@ -32,13 +32,20 @@ exports.create = async(req, res)=>{
 }
 
 exports.getAll = async function(req, res){
-  const locals = await Local.findAll()
+  const { name } = req.query;
+
+  let filter = {};
+
+  if (name) {
+    filter.name = { [Op.like]: `%${name}%` };
+  }
+  const locals = await Local.findAll({ where: filter, include: [Item]})
   return res.send(locals)
 }
 
 exports.getOne = async (req, res) => {
   const id = req.params.id
-  const local = await Local.findByPk(id, {include: [Item, Movement]})
+  const local = await Local.findByPk(id, {include: [Item]})
   if(!local){
     return res.status(404).json({ msg:"Local não encontrado!" })
   }
