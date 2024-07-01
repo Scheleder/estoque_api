@@ -1,3 +1,5 @@
+const moment = require('moment-timezone');
+const { Op } = require('sequelize');
 const Brand = require('../models/Brand')
 const Category = require('../models/Category')
 const Item = require('../models/Item')
@@ -41,7 +43,30 @@ exports.getOne = async (req, res) => {
 }
 
 exports.getAll = async (req, res) => {
+  const { name } = req.query;
+
+  let filter = {};
+
+  if (name) {
+    filter.name = { [Op.like]: `%${name}%` };
+  }
+
+  const dataIni = moment().subtract(1, 'months');
+  const startDate = moment.tz(dataIni, "YYYY-MM-DD", 'America/Sao_Paulo').startOf('day').format();
+
+  let lastMoves = {};
+  lastMoves.createdAt = {
+    [Op.gte]: startDate
+  };
+
   const users = await User.findAll({
+    where: filter, 
+    include: [
+      {
+        model: Movement,
+        where: lastMoves
+      }
+    ],
     attributes: { exclude: ['password'] } // Exclui o campo 'password'
   })
   return res.send(users)
