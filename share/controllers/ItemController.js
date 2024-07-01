@@ -82,7 +82,7 @@ exports.getAll = async function(req, res) {
 
 exports.getOne = async (req, res) => {
   const id = req.params.id
-  const item = await Item.findByPk(id, {include: [Component, Local]})
+  const item = await Item.findByPk(id, {include: [Component, Local, Movement]})
   if(!item){
     return res.status(404).json({ msg:"Item não encontrado!"})
   }
