@@ -43,7 +43,7 @@ exports.getAll = async function(req, res){
     filter.name = { [Op.like]: `%${name}%` };
   }
 
-  const brands = await Item.findAll({ 
+  const brands = await Brand.findAll({ 
     where: filter, 
     include: [
       {
