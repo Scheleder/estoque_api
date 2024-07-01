@@ -87,6 +87,11 @@ exports.getOne = async (req, res) => {
       include: [
         {
           model: Component,
+          include: [
+            {
+              model: Brand
+            }
+          ]
         },
         {
           model: Movement,
@@ -97,7 +102,7 @@ exports.getOne = async (req, res) => {
           ]
         }
       ]
-    }    
+    }
   )
   if (!item) {
     return res.status(404).json({ msg: "Item não encontrado!" })
