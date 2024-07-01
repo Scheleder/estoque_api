@@ -61,13 +61,14 @@ exports.getAll = async (req, res) => {
 
   const users = await User.findAll({
     where: filter, 
-    include: [
+    attributes: { exclude: ['password'] } // Exclui o campo 'password'
+    ,include: [
       {
         model: Movement,
-        where: lastMoves
+        where: lastMoves,
+        required: false
       }
     ],
-    attributes: { exclude: ['password'] } // Exclui o campo 'password'
   })
   return res.send(users)
 }
