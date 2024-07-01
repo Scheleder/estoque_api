@@ -35,7 +35,22 @@ exports.create = async(req, res)=>{
 }
 
 exports.getAll = async function(req, res){
-  const brands = await Brand.findAll()
+  const { name } = req.query;
+
+  let filter = {};
+
+  if (name) {
+    filter.name = { [Op.like]: `%${name}%` };
+  }
+
+  const brands = await Item.findAll({ 
+    where: filter, 
+    include: [
+      {
+        model: Component,
+      }
+    ]
+  });
   return res.send(brands)
 }
 
