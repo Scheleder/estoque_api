@@ -8,13 +8,13 @@ const User = require('../models/User')
 exports.create = async(req, res)=>{
   const {name} =  req.body
   if(!name){
-    return res.status(422).json({ msg:"Nome é obrigatório!"})
+    return res.status(100).json({ msg:"Nome é obrigatório!"})
   }
 
   //CHECK LOCAL
   const localExists = await Local.findOne({ where: { name: name } });
   if(localExists){
-    return res.status(422).json({ msg:"Este Local já está cadastrado!"})
+    return res.status(100).json({ msg:"Este Local já está cadastrado!"})
   }
 
   //CREATE LOCAL
