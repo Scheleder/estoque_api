@@ -9,13 +9,13 @@ const User = require('../models/User')
 exports.create = async(req, res)=>{
   const {name, website, logo} =  req.body
   if(!name){
-    return res.status(422).json({ msg:"Nome é obrigatório!"})
+    return res.status(202).json({ msg:"Nome é obrigatório!"})
   }
 
   //CHECK BRAND
   const brandExists = await Brand.findOne({ where: { name: name } });
   if(brandExists){
-    return res.status(422).json({ msg:"Este Fabricante já está cadastrado!"})
+    return res.status(202).json({ msg:"Este Fabricante já está cadastrado!"})
   }
 
   //CREATE BRAND
@@ -96,7 +96,7 @@ exports.update = async(req, res)=>{
   const id = req.params.id;
 
   if(!name){
-    return res.status(422).json({ msg:"Nome é obrigatório!"})
+    return res.status(202).json({ msg:"Nome é obrigatório!"})
   }
 
   const brand = await Brand.findByPk(id);
@@ -106,7 +106,7 @@ exports.update = async(req, res)=>{
   //CHECK NAME
   const nameExists = await Brand.findOne({ where: { name: name } });
   if(nameExists && nameExists.id != brand.id){
-    return res.status(422).json({ msg:"Este nome já está cadastrado!"})
+    return res.status(202).json({ msg:"Este nome já está cadastrado!"})
   }
 
   const updatedFields = {

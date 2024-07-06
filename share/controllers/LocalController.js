@@ -72,7 +72,7 @@ exports.update = async(req, res)=>{
   const id = req.params.id;
 
   if(!name){
-    return res.status(422).json({ msg:"Nome é obrigatório!"})
+    return res.status(202).json({ msg:"Nome é obrigatório!"})
   }
   
   const local = await Local.findByPk(id);
@@ -82,7 +82,7 @@ exports.update = async(req, res)=>{
   //CHECK NAME
   const nameExists = await Local.findOne({ where: { name: name } });
   if(nameExists && nameExists.id != local.id){
-    return res.status(422).json({ msg:"Este nome já está cadastrado!"})
+    return res.status(202).json({ msg:"Este nome já está cadastrado!"})
   }
 
   const updatedFields = {

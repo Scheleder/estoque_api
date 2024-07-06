@@ -9,15 +9,15 @@ const Unity = require('../models/Unity')
 exports.create = async(req, res)=>{
   const {name, abrev} =  req.body
   if(!name){
-    return res.status(422).json({ msg:"Nome é obrigatório!"})
+    return res.status(202).json({ msg:"Nome é obrigatório!"})
   }
   if(!abrev){
-    return res.status(422).json({ msg:"Abreviatura é obrigatória!"})
+    return res.status(202).json({ msg:"Abreviatura é obrigatória!"})
   }
   //CHECK LOCAL
   const unityExists = await Unity.findOne({ where: { name: name } });
   if(unityExists){
-    return res.status(422).json({ msg:"Esta Unidade já está cadastrado!"})
+    return res.status(202).json({ msg:"Esta Unidade já está cadastrado!"})
   }
 
   //CREATE LOCAL
@@ -69,7 +69,7 @@ exports.update = async(req, res)=>{
   const id = req.params.id;
 
   if(!name){
-    return res.status(422).json({ msg:"Nome é obrigatório!"})
+    return res.status(202).json({ msg:"Nome é obrigatório!"})
   }
   
   const unity = await Unity.findByPk(id);
@@ -79,7 +79,7 @@ exports.update = async(req, res)=>{
   //CHECK NAME
   const nameExists = await Unity.findOne({ where: { name: name } });
   if(nameExists && nameExists.id != unity.id){
-    return res.status(422).json({ msg:"Este nome já está cadastrado!"})
+    return res.status(202).json({ msg:"Este nome já está cadastrado!"})
   }
 
   const updatedFields = {

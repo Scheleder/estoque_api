@@ -12,16 +12,16 @@ const Unity = require('../models/Unity');
 exports.create = async (req, res) => {
   const { type, quantity, destination, itemId, userId, localId } = req.body
   if (!type) {
-    return res.status(422).json({ msg: "Tipo de movimentação é obrigatório!" })
+    return res.status(202).json({ msg: "Tipo de movimentação é obrigatório!" })
   }
   if (!quantity || quantity == 0) {
-    return res.status(422).json({ msg: "Quantidade é obrigatória!" })
+    return res.status(202).json({ msg: "Quantidade é obrigatória!" })
   }
   if (!destination) {
-    return res.status(422).json({ msg: "Destino é obrigatório!" })
+    return res.status(202).json({ msg: "Destino é obrigatório!" })
   }
   if (!itemId) {
-    return res.status(422).json({ msg: "Item é obrigatório!" })
+    return res.status(202).json({ msg: "Item é obrigatório!" })
   }
 
   //CREATE MOVEMENT
@@ -161,10 +161,10 @@ exports.update = async (req, res) => {
   const id = req.params.id;
 
   if (!destination) {
-    return res.status(422).json({ msg: "Destino é obrigatório!" })
+    return res.status(202).json({ msg: "Destino é obrigatório!" })
   }
   if (!quantity) {
-    return res.status(422).json({ msg: "Quantidade é obrigatória!" })
+    return res.status(202).json({ msg: "Quantidade é obrigatória!" })
   }
 
   const movement = await Movement.findByPk(id)

@@ -13,10 +13,10 @@ exports.login = async (req, res) => {
     console.log('login')
     const { email, password } = req.body
     if (!email) {
-        return res.status(422).json({ msg: "Informe o e-mail!" })
+        return res.status(202).json({ msg: "Informe o e-mail!" })
     }
     if (!password) {
-        return res.status(422).json({ msg: "Informe a senha!" })
+        return res.status(202).json({ msg: "Informe a senha!" })
     }
 
     //CHECK USER
@@ -29,7 +29,7 @@ exports.login = async (req, res) => {
     const checkPassword = await bcrypt.compare(password, user.password)
 
     if (!checkPassword) {
-        return res.status(422).json({ msg: 'A senha não confere!' })
+        return res.status(202).json({ msg: 'A senha não confere!' })
     }
 
     try {
@@ -49,21 +49,21 @@ exports.login = async (req, res) => {
 exports.register = async (req, res) => {
     const { name, email, password, confirmpassword } = req.body
     if (!name) {
-        return res.status(422).json({ msg: "Nome é obrigatório!" })
+        return res.status(202).json({ msg: "Nome é obrigatório!" })
     }
     if (!email) {
-        return res.status(422).json({ msg: "E-mail é obrigatório!" })
+        return res.status(202).json({ msg: "E-mail é obrigatório!" })
     }
     if (!password) {
-        return res.status(422).json({ msg: "Senha é obrigatória!" })
+        return res.status(202).json({ msg: "Senha é obrigatória!" })
     }
     if (password !== confirmpassword) {
-        return res.status(422).json({ msg: "Senhas não conferem!" })
+        return res.status(202).json({ msg: "Senhas não conferem!" })
     }
     //CHECK USER
     const userExists = await User.findOne({ where: { email: email } });
     if (userExists) {
-        return res.status(422).json({ msg: "Este e-mail já está cadastrado!" })
+        return res.status(202).json({ msg: "Este e-mail já está cadastrado!" })
     }
 
     //CREATE PASSWORD
@@ -94,7 +94,7 @@ exports.register = async (req, res) => {
 exports.checkCode = async (req, res) => {
     const { userId, code } = req.body;
     if (!code) {
-        return res.status(422).json({ msg: "Código é obrigatório!" })
+        return res.status(202).json({ msg: "Código é obrigatório!" })
     }
     const user = await User.findByPk(userId);
     if (!user) {
@@ -129,21 +129,21 @@ exports.checkCode = async (req, res) => {
 exports.updatePassWord = async (req, res) => {
     const { email, password, confirmpassword, code } = req.body
     if (!code) {
-        return res.status(422).json({ msg: "Código é obrigatório!" })
+        return res.status(202).json({ msg: "Código é obrigatório!" })
     }
     if (!email) {
-        return res.status(422).json({ msg: "E-mail é obrigatório!" })
+        return res.status(202).json({ msg: "E-mail é obrigatório!" })
     }
     if (!password) {
-        return res.status(422).json({ msg: "Senha é obrigatória!" })
+        return res.status(202).json({ msg: "Senha é obrigatória!" })
     }
     if (password !== confirmpassword) {
-        return res.status(422).json({ msg: "Senhas não conferem!" })
+        return res.status(202).json({ msg: "Senhas não conferem!" })
     }
     //CHECK USER
     const user = await User.findOne({ where: { email: email, code: code } });
     if (!user) {
-        return res.status(422).json({ msg: "Código não confere!" })
+        return res.status(202).json({ msg: "Código não confere!" })
     }
 
     //CREATE PASSWORD
@@ -168,13 +168,13 @@ exports.reset = async (req, res) => {
     const { email } = req.body
 
     if (!email) {
-        return res.status(422).json({ msg: "E-mail é obrigatório!" })
+        return res.status(202).json({ msg: "E-mail é obrigatório!" })
     }
 
     //CHECK USER
     const user = await User.findOne({ where: { email: email } });
     if (!user) {
-        return res.status(422).json({ msg: "Este e-mail não está cadastrado no sistema!" })
+        return res.status(202).json({ msg: "Este e-mail não está cadastrado no sistema!" })
     }
 
     try {

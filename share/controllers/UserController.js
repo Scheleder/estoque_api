@@ -93,10 +93,10 @@ exports.update = async (req, res) => {
   const id = req.params.id;
 
   if (!name) {
-    return res.status(422).json({ msg: "Nome é obrigatório!" })
+    return res.status(202).json({ msg: "Nome é obrigatório!" })
   }
   if (!email) {
-    return res.status(422).json({ msg: "E-mail é obrigatório!" })
+    return res.status(202).json({ msg: "E-mail é obrigatório!" })
   }
   //CHECK USER
   const user = await User.findByPk(id);
@@ -105,7 +105,7 @@ exports.update = async (req, res) => {
   }
   const userExists = await User.findOne({ where: { email: email } });
   if (userExists && userExists.id != user.id) {
-    return res.status(422).json({ msg: "Este e-mail já está cadastrado!" })
+    return res.status(202).json({ msg: "Este e-mail já está cadastrado!" })
   }
 
   const updatedFields = {

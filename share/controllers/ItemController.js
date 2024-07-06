@@ -11,16 +11,16 @@ const Component = require('../models/Component')
 exports.create = async (req, res) => {
   const { adress, quantity, minimum, localId, componentId } = req.body
   if (!adress) {
-    return res.status(422).json({ msg: "Endereço de estoque é obrigatório!" })
+    return res.status(202).json({ msg: "Endereço de estoque é obrigatório!" })
   }
   if (!componentId) {
-    return res.status(422).json({ msg: "Componente é obrigatório!" })
+    return res.status(202).json({ msg: "Componente é obrigatório!" })
   }
 
   //CHECK ITEM
   const itemExists = await Item.findOne({ where: { adress: adress } });
   if (itemExists) {
-    return res.status(422).json({ msg: "Este endereço de estoque já está ocupado!" })
+    return res.status(202).json({ msg: "Este endereço de estoque já está ocupado!" })
   }
 
   //CREATE ITEM
@@ -130,10 +130,10 @@ exports.update = async (req, res) => {
   const id = req.params.id;
 
   if (!componentId) {
-    return res.status(422).json({ msg: "Componente é obrigatório!" })
+    return res.status(202).json({ msg: "Componente é obrigatório!" })
   }
   if (!adress) {
-    return res.status(422).json({ msg: "Endereço de estoque é obrigatório!" })
+    return res.status(202).json({ msg: "Endereço de estoque é obrigatório!" })
   }
 
   const item = await Item.findByPk(id)
@@ -144,7 +144,7 @@ exports.update = async (req, res) => {
   //CHECK DESCRIPTION
   const nameExists = await Item.findOne({ where: { adress: adress } });
   if (nameExists && nameExists.id != item.id) {
-    return res.status(422).json({ msg: "Este item já está cadastrado!" })
+    return res.status(202).json({ msg: "Este item já está cadastrado!" })
   }
 
   const updatedFields = {

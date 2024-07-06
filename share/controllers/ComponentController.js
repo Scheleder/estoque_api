@@ -11,13 +11,13 @@ const Component = require('../models/Component')
 exports.create = async(req, res)=>{
   const {description, barcode, sku, brandId, categoryId, unityId} =  req.body
   if(!description){
-    return res.status(422).json({ msg:"Descrição é obrigatória!"})
+    return res.status(202).json({ msg:"Descrição é obrigatória!"})
   }
 
   //CHECK ITEM
   const componentExists = await Component.findOne({ where: { description: description } });
   if(componentExists){
-    return res.status(422).json({ msg:"Este Componente já está cadastrado!"})
+    return res.status(202).json({ msg:"Este Componente já está cadastrado!"})
   }
 
   //CREATE ITEM
@@ -101,7 +101,7 @@ exports.update = async(req, res)=>{
   const id = req.params.id;
 
   if(!description){
-    return res.status(422).json({ msg:"Descrição é obrigatória!"})
+    return res.status(202).json({ msg:"Descrição é obrigatória!"})
   }
 
   const component = await Component.findByPk(id)
@@ -112,7 +112,7 @@ exports.update = async(req, res)=>{
   //CHECK DESCRIPTION
   const nameExists = await Component.findOne({ where: { description: description } });
   if(nameExists && nameExists.id != component.id){
-    return res.status(422).json({ msg:"Este componente já está cadastrado!"})
+    return res.status(202).json({ msg:"Este componente já está cadastrado!"})
   }
 
   const updatedFields = {
