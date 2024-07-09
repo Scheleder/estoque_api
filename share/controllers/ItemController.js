@@ -18,8 +18,12 @@ exports.create = async (req, res) => {
   }
 
   //CHECK ITEM
-  const itemExists = await Item.findOne({ where: { adress: adress } });
+  const itemExists = await Item.findOne({ where: { componentId: componentId } });
   if (itemExists) {
+    return res.status(202).json({ msg: "Este item já existe e está posicionado no endereço " + itemExists.adress + "!" })
+  }
+  const adressBusy = await Item.findOne({ where: { adress: adress } });
+  if (adressBusy) {
     return res.status(202).json({ msg: "Este endereço de estoque já está ocupado!" })
   }
 
