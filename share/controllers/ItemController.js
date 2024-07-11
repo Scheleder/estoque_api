@@ -69,6 +69,9 @@ exports.getAll = async function (req, res) {
           model: Component,
           include: [
             {
+              model: Brand
+            },
+            {
               model: Unity
             }
           ]
