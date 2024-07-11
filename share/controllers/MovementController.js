@@ -24,6 +24,16 @@ exports.create = async (req, res) => {
     return res.status(202).json({ msg: "Item é obrigatório!" })
   }
 
+  if(type === 1){
+    const item ={
+      id: itemId,
+      adress: destination,
+      quantity: quantity,
+      localId: localId
+    }
+    await updateItem(item);
+  }
+
   //CREATE MOVEMENT
   const movement = new Movement({
     type,
@@ -36,7 +46,7 @@ exports.create = async (req, res) => {
 
   try {
     await movement.save()
-    return res.status(201).json({ msg: 'OK', movement })
+    return res.status(201).json({ msg: '✔ ' + type, movement })
   } catch (error) {
     console.log(error)
     return res.status(500).json({ msg: 'FAIL' })
@@ -44,7 +54,7 @@ exports.create = async (req, res) => {
 }
 
 
-exports.getAll = async function(req, res) {
+exports.getAll = async function (req, res) {
   const { description, barcode, address, localId, brandId, categoryId, dataIni, dataFim } = req.query;
 
   let filter = {};
@@ -115,9 +125,9 @@ exports.getAll = async function(req, res) {
         }
       ]
     });
-    
+
     return res.send(movements);
-    
+
   } catch (error) {
     return res.status(500).json({ msg: "Erro ao buscar movimentações", error: error.message });
   }
@@ -126,17 +136,19 @@ exports.getAll = async function(req, res) {
 exports.getOne = async (req, res) => {
   const id = req.params.id
   const movement = await Movement.findByPk(id,
-    {include: [
-      {
-        model: Item
-      },
-      {
-        model: User,
-        attributes: { exclude: ['password'] }
-      }
-    ]}
+    {
+      include: [
+        {
+          model: Item
+        },
+        {
+          model: User,
+          attributes: { exclude: ['password'] }
+        }
+      ]
+    }
   );
-  
+
   if (!movement) {
     return res.status(404).json({ msg: "Movimentação não encontrada!" })
   }
@@ -191,4 +203,16 @@ exports.update = async (req, res) => {
     console.log(error)
     return res.status(500).json({ msg: 'Erro ao atualizar a movimentação! Erro:' + error })
   }
+}
+
+async function updateItem(item) {
+  const item = await Item.findByPk(item.id)
+
+  const updatedFields = {
+    adress: item.adress,
+    quantity: item.quantity,
+    localId: item.localId,
+  };
+
+  await item.update(updatedFields)
 }
