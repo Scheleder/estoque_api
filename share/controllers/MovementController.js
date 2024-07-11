@@ -100,7 +100,10 @@ exports.getAll = async function(req, res) {
               model: Component,
               include: [
                 {
-                  model: Unity, model: Brand
+                  model: Unity
+                },
+                {
+                  model: Brand
                 }
               ]
             }
