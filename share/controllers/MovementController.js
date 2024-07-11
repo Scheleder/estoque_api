@@ -206,7 +206,7 @@ exports.update = async (req, res) => {
 }
 
 async function updateItem(item) {
-  const item = await Item.findByPk(item.id)
+  const targetItem = await Item.findByPk(item.id)
 
   const updatedFields = {
     adress: item.adress,
@@ -214,5 +214,5 @@ async function updateItem(item) {
     localId: item.localId,
   };
 
-  await item.update(updatedFields)
+  await targetItem.update(updatedFields)
 }
