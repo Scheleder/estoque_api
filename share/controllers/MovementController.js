@@ -25,13 +25,16 @@ exports.create = async (req, res) => {
   }
 
   if(type === 1){
-    const item ={
-      id: itemId,
+
+    const targetItem = await Item.findByPk(itemId)
+
+    const updatedFields = {
       adress: destination,
       quantity: quantity,
-      localId: localId
-    }
-    await updateItem(item);
+      localId: localId,
+    };  
+
+    await targetItem.update(updatedFields)
   }
 
   //CREATE MOVEMENT
@@ -49,7 +52,7 @@ exports.create = async (req, res) => {
     return res.status(201).json({ msg: '✔ ' + type, movement })
   } catch (error) {
     console.log(error)
-    return res.status(500).json({ msg: 'FAIL' })
+    return res.status(500).json({ msg: 'Ocorreu um erro inesperado' })
   }
 }
 
@@ -203,16 +206,4 @@ exports.update = async (req, res) => {
     console.log(error)
     return res.status(500).json({ msg: 'Erro ao atualizar a movimentação! Erro:' + error })
   }
-}
-
-async function updateItem(item) {
-  const targetItem = await Item.findByPk(item.id)
-
-  const updatedFields = {
-    adress: item.adress,
-    quantity: item.quantity,
-    localId: item.localId,
-  };
-
-  await targetItem.update(updatedFields)
 }
