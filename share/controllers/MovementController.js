@@ -23,7 +23,7 @@ exports.create = async (req, res) => {
   if (!itemId) {
     return res.status(202).json({ msg: "Item é obrigatório!" })
   }
-
+console.log(type)
   if(type === 1){
 
     const targetItem = await Item.findByPk(itemId)
