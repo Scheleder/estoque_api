@@ -20,7 +20,6 @@ exports.create = async (req, res) => {
 
   const targetItem = await Item.findByPk(itemId)
   var updatedFields = {}; 
-  console.log('QUANTIDADE: '+ quantity)
 
   if(type === 'Ajuste de estoque'){
     updatedFields = {
@@ -47,6 +46,7 @@ exports.create = async (req, res) => {
       quantity: targetItem.quantity - quantity
     }; 
   }
+  console.log('UPDATE '+ updatedFields)
   await targetItem.update(updatedFields)
 
   //CREATE MOVEMENT
