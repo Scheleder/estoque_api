@@ -30,6 +30,7 @@ exports.create = async (req, res) => {
     updatedFields = {
       adress: destination
     }; 
+    quantity = targetItem.quantity;
   }
 
   await targetItem.update(updatedFields)
