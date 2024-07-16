@@ -33,19 +33,17 @@ exports.create = async (req, res) => {
   }
   else if(type === 'Consumo na ordem'){
     updatedFields = {
-      quantity: targetItem.quantity - parseFloat(quantity)
+      quantity: parseFloat(targetItem.quantity) - parseFloat(quantity)
     }; 
   }
   else if(type === 'Entrada de material'){
-    console.log('TIPO DE QTDE: ' + typeof(quantity))
-    console.log('TIPO DE QTDE: ' + typeof(targetItem.quantity))
     updatedFields = {
-      quantity: targetItem.quantity + parseFloat(quantity)
+      quantity: parseFloat(targetItem.quantity) + parseFloat(quantity)
     }; 
   }
   else if(type === 'Saída de material'){
     updatedFields = {
-      quantity: targetItem.quantity - parseFloat(quantity)
+      quantity: parseFloat(targetItem.quantity) - parseFloat(quantity)
     }; 
   }
   console.log('TIPO: '+type)
