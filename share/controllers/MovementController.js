@@ -38,6 +38,7 @@ exports.create = async (req, res) => {
   }
   else if(type === 'Entrada de material'){
     console.log('TIPO DE QTDE: ' + typeof(quantity))
+    console.log('TIPO DE QTDE: ' + typeof(targetItem.quantity))
     updatedFields = {
       quantity: targetItem.quantity + parseFloat(quantity)
     }; 
