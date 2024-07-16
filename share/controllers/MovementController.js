@@ -18,17 +18,21 @@ exports.create = async (req, res) => {
     return res.status(202).json({ msg: "Item é obrigatório!" })
   }
 
-  if(type === 'Ajuste de estoque' || type==='Alterar endereço de estoque'){
-    const targetItem = await Item.findByPk(itemId)
-    console.log(targetItem)
-    const updatedFields = {
-      adress: destination || targetItem.destination,
-      quantity: quantity || targetItem.quantity,
-      localId: localId || targetItem.localId,
+  const targetItem = await Item.findByPk(itemId)
+  const updatedFields = {}; 
+
+  if(type === 'Ajuste de estoque'){
+    updatedFields = {
+      quantity: quantity
     };  
-    console.log(updatedFields)
-    await targetItem.update(updatedFields)
   }
+  else if(type === 'Alterar endereço de estoque'){
+    updatedFields = {
+      adress: destination
+    }; 
+  }
+  
+  await targetItem.update(updatedFields)
 
   //CREATE MOVEMENT
   const movement = new Movement({
