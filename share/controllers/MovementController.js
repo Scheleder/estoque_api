@@ -37,7 +37,16 @@ exports.create = async (req, res) => {
       quantity: targetItem.quantity - quantity
     }; 
   }
-
+  else if(type === 'Entrada de material'){
+    updatedFields = {
+      quantity: targetItem.quantity + quantity
+    }; 
+  }
+  else if(type === 'Saída de material'){
+    updatedFields = {
+      quantity: targetItem.quantity - quantity
+    }; 
+  }
   await targetItem.update(updatedFields)
 
   //CREATE MOVEMENT
