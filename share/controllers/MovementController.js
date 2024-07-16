@@ -14,12 +14,6 @@ exports.create = async (req, res) => {
   if (!type) {
     return res.status(202).json({ msg: "Tipo de movimentação é obrigatório!" })
   }
-  if (!quantity || quantity == 0) {
-    return res.status(202).json({ msg: "Quantidade é obrigatória!" })
-  }
-  if (!destination) {
-    return res.status(202).json({ msg: "Destino é obrigatório!" })
-  }
   if (!itemId) {
     return res.status(202).json({ msg: "Item é obrigatório!" })
   }
@@ -27,9 +21,9 @@ exports.create = async (req, res) => {
   if(type === 'Ajuste de estoque' || type==='Alterar endereço de estoque'){
     const targetItem = await Item.findByPk(itemId)
     const updatedFields = {
-      adress: destination,
-      quantity: quantity,
-      localId: localId,
+      adress: destination || targetItem.destination,
+      quantity: quantity || targetItem.quantity,
+      localId: localId || targetItem.localId,
     };  
     await targetItem.update(updatedFields)
   }
