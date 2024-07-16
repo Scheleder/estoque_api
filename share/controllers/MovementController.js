@@ -19,7 +19,7 @@ exports.create = async (req, res) => {
   }
 
   const targetItem = await Item.findByPk(itemId)
-  const updatedFields = {}; 
+  var updatedFields = {}; 
 
   if(type === 'Ajuste de estoque'){
     updatedFields = {
@@ -31,7 +31,7 @@ exports.create = async (req, res) => {
       adress: destination
     }; 
   }
-  
+
   await targetItem.update(updatedFields)
 
   //CREATE MOVEMENT
