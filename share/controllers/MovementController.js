@@ -10,7 +10,7 @@ const Component = require('../models/Component');
 const Unity = require('../models/Unity');
 
 exports.create = async (req, res) => {
-  const { type, quantity, destination, itemId, userId, localId } = req.body
+  const { type, quantity, destination, itemId, userId, localId, order } = req.body
   if (!type) {
     return res.status(202).json({ msg: "Tipo de movimentação é obrigatório!" })
   }
@@ -29,6 +29,11 @@ exports.create = async (req, res) => {
   else if(type === 'Alterar endereço de estoque'){
     updatedFields = {
       adress: destination
+    }; 
+  }
+  else if(type === 'Consumo na ordem'){
+    updatedFields = {
+      destination: order
     }; 
   }
 
