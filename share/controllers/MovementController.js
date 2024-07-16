@@ -46,7 +46,11 @@ exports.create = async (req, res) => {
       quantity: parseFloat(targetItem.quantity) - parseFloat(quantity)
     }; 
   }
-  console.log('TIPO: '+type)
+  else if(type === 'Transferência para outro estoque'){
+    updatedFields = {
+      quantity: parseFloat(targetItem.quantity) - parseFloat(quantity)
+    }; 
+  }
   await targetItem.update(updatedFields)
 
   //CREATE MOVEMENT
