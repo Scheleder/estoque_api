@@ -46,7 +46,7 @@ exports.create = async (req, res) => {
       quantity: targetItem.quantity - quantity
     }; 
   }
-  console.log('UPDATE '+ updatedFields)
+  console.log('TIPO: '+type)
   await targetItem.update(updatedFields)
 
   //CREATE MOVEMENT
