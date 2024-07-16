@@ -33,18 +33,18 @@ exports.create = async (req, res) => {
   }
   else if(type === 'Consumo na ordem'){
     updatedFields = {
-      quantity: targetItem.quantity - quantity
+      quantity: targetItem.quantity - parseFloat(quantity)
     }; 
   }
   else if(type === 'Entrada de material'){
     console.log('TIPO DE QTDE: ' + typeof(quantity))
     updatedFields = {
-      quantity: targetItem.quantity + quantity
+      quantity: targetItem.quantity + parseFloat(quantity)
     }; 
   }
   else if(type === 'Saída de material'){
     updatedFields = {
-      quantity: targetItem.quantity - quantity
+      quantity: targetItem.quantity - parseFloat(quantity)
     }; 
   }
   console.log('TIPO: '+type)
