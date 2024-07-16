@@ -33,7 +33,7 @@ exports.create = async (req, res) => {
   }
   else if(type === 'Consumo na ordem'){
     updatedFields = {
-      destination: order
+      quantity: targetItem.quantity - quantity
     }; 
   }
 
