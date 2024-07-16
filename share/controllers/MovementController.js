@@ -10,7 +10,7 @@ const Component = require('../models/Component');
 const Unity = require('../models/Unity');
 
 exports.create = async (req, res) => {
-  const { type, quantity, destination, itemId, userId, localId, order } = req.body
+  const { type, quantity, destination, itemId, userId, localId } = req.body
   if (!type) {
     return res.status(202).json({ msg: "Tipo de movimentação é obrigatório!" })
   }
@@ -20,6 +20,7 @@ exports.create = async (req, res) => {
 
   const targetItem = await Item.findByPk(itemId)
   var updatedFields = {}; 
+  console.log('QUANTIDADE: '+ quantity)
 
   if(type === 'Ajuste de estoque'){
     updatedFields = {
