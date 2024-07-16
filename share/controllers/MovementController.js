@@ -25,15 +25,12 @@ exports.create = async (req, res) => {
   }
 
   if(type === 'Ajuste de estoque'){
-
     const targetItem = await Item.findByPk(itemId)
-    console.log(targetItem)
     const updatedFields = {
       adress: destination,
       quantity: quantity,
       localId: localId,
     };  
-console.log(updatedFields)
     await targetItem.update(updatedFields)
   }
 
