@@ -24,7 +24,7 @@ exports.create = async (req, res) => {
     return res.status(202).json({ msg: "Item é obrigatório!" })
   }
 
-  if(type === 'Ajuste de estoque'){
+  if(type === 'Ajuste de estoque' || type==='Alterar endereço de estoque'){
     const targetItem = await Item.findByPk(itemId)
     const updatedFields = {
       adress: destination,
