@@ -37,6 +37,7 @@ exports.create = async (req, res) => {
     }; 
   }
   else if(type === 'Entrada de material'){
+    console.log('TIPO DE QTDE: ' + typeof(quantity))
     updatedFields = {
       quantity: targetItem.quantity + quantity
     }; 
