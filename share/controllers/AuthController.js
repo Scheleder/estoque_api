@@ -2,6 +2,7 @@ const User = require('../models/User')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const MailService = require('../services/MailService');
+const moment = require('moment-timezone');
 
 //CREATE RANDOM CODE
 codeGenerate = function () {
