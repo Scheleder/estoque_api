@@ -122,6 +122,7 @@ exports.update = async(req, res)=>{
     brandId: brandId || component.brandId || 1,
     categoryId: categoryId || component.categoryId || 1,
     unityId: unityId || component.unityId || 1,
+    updatedAt: moment.tz('America/Sao_Paulo').format()
   };
 
   try {

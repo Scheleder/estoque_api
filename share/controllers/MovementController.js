@@ -213,6 +213,7 @@ exports.update = async (req, res) => {
     userId: userId || movement.userId || 1,
     itemId: itemId || movement.itemId || 1,
     localId: localId || movement.localId || 1,
+    updatedAt: moment.tz('America/Sao_Paulo').format()
   };
 
   try {

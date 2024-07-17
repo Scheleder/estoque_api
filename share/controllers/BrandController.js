@@ -112,7 +112,8 @@ exports.update = async(req, res)=>{
   const updatedFields = {
     name: name || brand.name,
     website: website || brand.website,
-    logo: logo || brand.logo
+    logo: logo || brand.logo,
+    updatedAt: moment.tz('America/Sao_Paulo').format()
   };
 
   try {

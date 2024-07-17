@@ -111,11 +111,12 @@ exports.update = async (req, res) => {
   const updatedFields = {
     name: name || user.name,
     email: email || user.email,
+    updatedAt: moment.tz('America/Sao_Paulo').format()
   };
 
   try {
     await user.update(updatedFields)
-    return res.status(200).json({ msg: "Usuário atualizado com sucesso!", user: { id: user.id, name: user.name, email: user.email } });
+    return res.status(200).json({ msg: "Usuário atualizado com sucesso!", user: { id: user.id, name: user.name, email: user.email, createdAt: user.createdAt } });
   } catch (error) {
     console.log(error)
     return res.status(500).json({ msg: 'Erro ao atualizar o usuário! Erro:' + error })

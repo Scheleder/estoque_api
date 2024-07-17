@@ -160,6 +160,7 @@ exports.update = async (req, res) => {
     minimum: minimum || item.minimum || 0,
     componentId: componentId || item.componentId || 1,
     localId: localId || item.localId || 1,
+    updatedAt: moment.tz('America/Sao_Paulo').format()
   };
 
   try {

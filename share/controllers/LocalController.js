@@ -87,6 +87,7 @@ exports.update = async(req, res)=>{
 
   const updatedFields = {
     name: name || local.name,
+    updatedAt: moment.tz('America/Sao_Paulo').format()
   };
 
   try {
