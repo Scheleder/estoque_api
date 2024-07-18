@@ -15,6 +15,10 @@ const User = database.define('User', {
     code: {
       type: DataTypes.STRING
     },
+    code: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
 }, {
   timestamps: true,
   paranoid: true

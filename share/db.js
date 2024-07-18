@@ -31,10 +31,10 @@ const database = new Sequelize(
   try {
       database.authenticate();
       console.log(chalk.blue("mySQL connected successfully!"));
-      //CREATE DATABASE
-      //  database.sync({force:true}).then(() => {
-      //    console.log("Drop and re-sync database.");
-      //  });
+      //UPDATE DATABASE use force to recreate
+       database.sync({alter:true}).then(() => {
+         console.log("Drop and re-sync database.");
+       });
     } catch (error) {
       console.error(chalk.red("Fail on mySQL connection: ", error));
     }
