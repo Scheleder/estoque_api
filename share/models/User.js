@@ -15,7 +15,7 @@ const User = database.define('User', {
     code: {
       type: DataTypes.STRING
     },
-    code: {
+    admin: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
     },
