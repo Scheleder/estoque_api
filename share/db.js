@@ -32,7 +32,7 @@ const database = new Sequelize(
       database.authenticate();
       console.log(chalk.blue("mySQL connected successfully!"));
       //UPDATE DATABASE use force to recreate
-       database.sync({alter:true}).then(() => {
+       database.sync({force:true}).then(() => {
          console.log("Drop and re-sync database.");
        });
     } catch (error) {
