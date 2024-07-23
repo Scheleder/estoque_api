@@ -45,7 +45,7 @@ exports.sendResetCode = async (user) => {
       from: sender,
       to: recipients,
       subject: APP,
-      text: "Olá " + user.name + "! Se você solicitou a alteração de senha no " + APP + ". Use o código " + user.code + " para alterá-la.",
+      text: "Olá " + user.name + "! Se você solicitou a alteração de senha no " + APP + ". Use o código " + user.code + " para alterá-la. Depois use este mesmo código como senha para acessar e então altere a sua senha dentro do so sistema.",
       category: "Welcome Email",
     })
     .then(function (results) {

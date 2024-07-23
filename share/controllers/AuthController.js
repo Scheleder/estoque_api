@@ -82,7 +82,7 @@ exports.register = async (req, res) => {
     try {
         await user.save()
         if (MailService.sendCodeVerification(user)) {
-            return res.status(201).json({ msg: "Enviamos um código para " + user.email + ". Use este código para fazer login pela primeira vez.", id:user.id })
+            return res.status(201).json({ msg: "Enviamos um código para " + user.email + ". Use este código para fazer login pela primeira vez.", id: user.id })
         } else {
             return res.status(202).json({ msg: "Falha ao enviar o email de confirmação!" })
         }
@@ -181,8 +181,13 @@ exports.reset = async (req, res) => {
         return res.status(202).json({ msg: "Este e-mail não está cadastrado no sistema!" })
     }
 
+    let code = codeGenerate();
+    //CREATE TEMPORARY PASSWORD
+    const salt = await bcrypt.genSalt(12)
+    const passwordHash = await bcrypt.hash(code, salt)
+
     try {
-        await user.update({ code: codeGenerate() })
+        await user.update({ code: code, password: passwordHash })
         if (MailService.sendResetCode(user)) {
             return res.status(201).json({ msg: "Enviamos um código para " + user.email + ". Use este código para alterar a sua senha." })
         } else {
