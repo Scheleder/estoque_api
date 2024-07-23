@@ -43,7 +43,7 @@ exports.login = async (req, res) => {
         }
     } catch (error) {
         console.log(error)
-        return res.status(500).json({ msg: 'Erro ao cadastrar o usuário! Erro:' + error })
+        return res.status(500).json({ msg: 'Erro ao realizar login! Erro:' + error })
     }
 }
 
@@ -82,7 +82,7 @@ exports.register = async (req, res) => {
     try {
         await user.save()
         if (MailService.sendCodeVerification(user)) {
-            return res.status(201).json({ msg: "Enviamos um código para " + user.email + ". Use este código para fazer login pela primeira vez." })
+            return res.status(201).json({ msg: "Enviamos um código para " + user.email + ". Use este código para fazer login pela primeira vez.", id:user.id })
         } else {
             return res.status(202).json({ msg: "Falha ao enviar o email de confirmação!" })
         }
