@@ -84,7 +84,7 @@ exports.register = async (req, res) => {
         if (MailService.sendCodeVerification(user)) {
             return res.status(201).json({ msg: "Enviamos um código para " + user.email + ". Use este código para fazer login pela primeira vez." })
         } else {
-            return res.status(404).json({ msg: "Falha ao enviar o email de confirmação!" })
+            return res.status(202).json({ msg: "Falha ao enviar o email de confirmação!" })
         }
     } catch (error) {
         console.log(error)
