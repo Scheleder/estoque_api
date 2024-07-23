@@ -23,7 +23,7 @@ exports.login = async (req, res) => {
     //CHECK USER
     const user = await User.findOne({ where: { email: email } });
     if (!user) {
-        return res.status(404).json({ msg: "Este e-mail não está cadastrado!" })
+        return res.status(202).json({ msg: "Este e-mail não está cadastrado!" })
     }
 
     //CHECK PASSWORD
