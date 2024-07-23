@@ -99,7 +99,10 @@ exports.checkCode = async (req, res) => {
     }
     const user = await User.findByPk(userId);
     if (!user) {
-        return res.status(404).json({ msg: "Usuário não encontrado!" })
+        return res.status(202).json({ msg: "Usuário não encontrado!" })
+    }
+    if (!user.code) {
+        return res.status(202).json({ msg: "Não há solicitação de código pendente!" })
     }
 
     if (user.code == code) {
@@ -114,7 +117,7 @@ exports.checkCode = async (req, res) => {
         try {
             await user.update({ code: codeGenerate() })
             if (MailService.sendCodeVerification(user)) {
-                return res.status(201).json({ msg: "Os códigos não conferem. Enviamos um novo código de verificação para " + user.email + "." })
+                return res.status(202).json({ msg: "Os códigos não conferem. Enviamos um novo código de verificação para " + user.email + "." })
             } else {
                 return res.status(404).json({ msg: "Falha ao enviar o email de confirmação!" })
             }
