@@ -189,7 +189,7 @@ exports.reset = async (req, res) => {
     try {
         await user.update({ code: code, password: passwordHash })
         if (MailService.sendResetCode(user)) {
-            return res.status(201).json({ msg: "Enviamos um código para " + user.email + ". Use este código para alterar a sua senha." })
+            return res.status(201).json({ msg: "Enviamos um código para " + user.email + ". Use este código para alterar a sua senha.", id:user.id })
         } else {
             return res.status(404).json({ msg: "Falha ao enviar o email!" })
         }
