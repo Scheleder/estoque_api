@@ -37,7 +37,7 @@ exports.login = async (req, res) => {
         const secret = process.env.APP_SECRET
         const token = jwt.sign({ id: user.id }, secret)
         if (!user.code) {
-            return res.status(200).json({ msg: "Logado com sucesso!", token, user: { id: user.id, name: user.name, email: user.email } })
+            return res.status(200).json({ msg: "Logado com sucesso!", token, user: { id: user.id, name: user.name, email: user.email, admin: user.admin } })
         } else {
             return res.status(200).json({ msg: "code" })
         }
