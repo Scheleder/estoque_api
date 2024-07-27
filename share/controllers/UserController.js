@@ -89,7 +89,7 @@ exports.delete = async (req, res) => {
 }
 
 exports.update = async (req, res) => {
-  const { name, email } = req.body
+  const { name, email, admin } = req.body
   const id = req.params.id;
 
   if (!name) {
@@ -111,12 +111,13 @@ exports.update = async (req, res) => {
   const updatedFields = {
     name: name || user.name,
     email: email || user.email,
+    admin: admin || user.admin,
     updatedAt: moment.tz('America/Sao_Paulo').format()
   };
 
   try {
     await user.update(updatedFields)
-    return res.status(200).json({ msg: "Usuário atualizado com sucesso!", user: { id: user.id, name: user.name, email: user.email, createdAt: user.createdAt } });
+    return res.status(200).json({ msg: "Usuário atualizado com sucesso!", user: { id: user.id, name: user.name, email: user.email, admin: user.admin, createdAt: user.createdAt } });
   } catch (error) {
     console.log(error)
     return res.status(500).json({ msg: 'Erro ao atualizar o usuário! Erro:' + error })
