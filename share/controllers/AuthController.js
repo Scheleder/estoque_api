@@ -39,7 +39,7 @@ exports.login = async (req, res) => {
         if (!user.code) {
             return res.status(200).json({ msg: "Logado com sucesso!", token, user: { id: user.id, name: user.name, email: user.email, admin: user.admin } })
         } else {
-            return res.status(200).json({ msg: "code" })
+            return res.status(200).json({ msg: "code", id: user.id })
         }
     } catch (error) {
         console.log(error)
