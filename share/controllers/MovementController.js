@@ -76,7 +76,7 @@ exports.getAll = async function (req, res) {
   const { type, destination, localId, itemId, userId, dataIni, dataFim } = req.query;
 
   let filter = {};
-
+console.log(type)
   if (type) {
     filter.type = type;
   }
@@ -113,6 +113,8 @@ exports.getAll = async function (req, res) {
       [Op.lte]: endDate
     };
   }
+
+  console.log(JSON.stringify(filter))
 
   try {
     const movements = await Movement.findAll({
