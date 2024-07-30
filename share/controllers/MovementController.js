@@ -78,7 +78,7 @@ exports.getAll = async function (req, res) {
   let filter = {};
 console.log(type)
   if (type) {
-    filter.type = type;
+    filter.type = { [Op.like]: `%${type}%` };
   }
   if (destination) {
     filter.destination = { [Op.like]: `%${destination}%` };
