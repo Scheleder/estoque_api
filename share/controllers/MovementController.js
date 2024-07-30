@@ -72,29 +72,25 @@ exports.create = async (req, res) => {
   }
 }
 
-
 exports.getAll = async function (req, res) {
-  const { description, barcode, address, localId, brandId, categoryId, dataIni, dataFim } = req.query;
+  const { type, destination, localId, itemId, userId, dataIni, dataFim } = req.query;
 
   let filter = {};
 
-  if (description) {
-    filter.description = { [Op.like]: `%${description}%` };
+  if (type) {
+    filter.type = { [Op.like]: `%${type}%` };
   }
-  if (barcode) {
-    filter.barcode = barcode;
-  }
-  if (address) {
-    filter.address = { [Op.like]: `%${address}%` };
+  if (destination) {
+    filter.destination = { [Op.like]: `%${destination}%` };
   }
   if (localId) {
     filter.localId = localId;
   }
-  if (brandId) {
-    filter.brandId = brandId;
+  if (itemId) {
+    filter.itemId = itemId;
   }
-  if (categoryId) {
-    filter.categoryId = categoryId;
+  if (userId) {
+    filter.userId = userId;
   }
 
   if (dataIni && dataFim) {
