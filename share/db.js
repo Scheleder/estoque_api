@@ -32,9 +32,9 @@ const database = new Sequelize(
       database.authenticate();
       console.log(chalk.blue("mySQL connected successfully!"));
       //UPDATE DATABASE use force to recreate
-        database.sync({force:true}).then(() => {
-          console.log("Drop and re-sync database.");
-        });
+      //  database.sync({force:true}).then(() => {
+      //    console.log("Drop and re-sync database.");
+      //  });
     } catch (error) {
       console.error(chalk.red("Fail on mySQL connection: ", error));
     }
