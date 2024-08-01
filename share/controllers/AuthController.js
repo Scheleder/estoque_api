@@ -82,13 +82,33 @@ exports.register = async (req, res) => {
     try {
         await user.save()
         if (MailService.sendCodeVerification(user)) {
-            return res.status(201).json({ msg: "Enviamos um código para " + user.email + ". Use este código para fazer login pela primeira vez.", id:user.id })
+            return res.status(201).json({ msg: "Enviamos um código para " + user.email + ". Use este código para fazer login pela primeira vez.", id: user.id })
         } else {
-            return res.status(202).json({ msg: "Falha ao enviar o email de confirmação!" })
+            return res.status(202).json({ msg: "Falha ao enviar o código de confirmação!" })
         }
     } catch (error) {
         console.log(error)
         return res.status(500).json({ msg: 'Erro ao cadastrar o usuário! Erro:' + error })
+    }
+}
+
+exports.send = async (req, res) => {
+    const id = req.params.id
+    const user = User.findByPk(id);
+    //CHECK USER
+    if (!user) {
+        return res.status(202).json({ msg: "Usuário não encontrado!" })
+    }
+    try {
+        await user.update({ code: codeGenerate() })
+        if (MailService.sendCodeVerification(user)) {
+            return res.status(201).json({ msg: "Enviamos um novo código para " + user.email + ". Use este código para fazer login pela primeira vez.", id: user.id })
+        } else {
+            return res.status(202).json({ msg: "Falha ao enviar o código de confirmação!" })
+        }
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ msg: 'Erro ao enviar o código! Erro:' + error })
     }
 }
 
