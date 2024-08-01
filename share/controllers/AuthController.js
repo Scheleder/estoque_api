@@ -94,7 +94,7 @@ exports.register = async (req, res) => {
 
 exports.send = async (req, res) => {
     const id = req.params.id
-    const user = User.findByPk(id);
+    const user = await User.findByPk(id);
     //CHECK USER
     if (!user) {
         return res.status(202).json({ msg: "Usuário não encontrado!" })
