@@ -100,7 +100,8 @@ exports.send = async (req, res) => {
         return res.status(202).json({ msg: "Usuário não encontrado!" })
     }
     try {
-        await user.update({ code: codeGenerate() })
+        const newCode = codeGenerate();
+        await user.update({ code: newCode })
         if (MailService.sendCodeVerification(user)) {
             return res.status(201).json({ msg: "Enviamos um novo código para " + user.email + ". Use este código para fazer login pela primeira vez.", id: user.id })
         } else {
@@ -202,7 +203,8 @@ exports.reset = async (req, res) => {
     }
 
     try {
-        await user.update({ code: codeGenerate() })
+        const newCode = codeGenerate();
+        await user.update({ code: newCode })
         if (MailService.sendResetCode(user)) {
             return res.status(201).json({ msg: "Enviamos um código para " + user.email + ". Use este código para recuperar sua conta." })
         } else {
