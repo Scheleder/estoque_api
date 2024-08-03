@@ -1,0 +1,282 @@
+NODE.JS MODELO API REST
+
+######### INSTALAR
+https://nodejs.org/en/download/
+
+######### INSTALAR DEPENDENCIAS
+npm init -y
+npm install --save sequelize
+npm install --save sequelize-cli
+npm install --save mysql2
+npm install --save dotenv
+npm install --save bcrypt
+npm install --save express
+npm install --save jsonwebtoken
+nom install -g nodemon 
+
+######### CRIAR ARQUIVO .env
+DB_USERNAME=nodejs
+DB_PASSWORD=nodejs
+DB_DATABASE=nodejs_template
+DB_HOSTNAME=localhost
+DB_DATATYPE=mysql
+DB_URI=mysql://nodejs:nodejs@localhost:3306/nodejs_teste
+APP_HOST=localhost
+APP_PORT=3000
+
+DB_USERNAME=u119241193_estoquecgs
+DB_PASSWORD=CGS_estoque!2024
+DB_DATABASE=u119241193_estoquecgs
+DB_HOSTNAME=45.132.157.204
+DB_DATATYPE=mysql
+DB_URI=mysql://nodejs:nodejs@45.132.157.204:3306/u119241193_estoquecgs
+APP_HOST=localhost
+APP_PORT=3000
+APP_SECRET=D9$K30S*L4L@S78!J2%$ND92
+
+######### CRIAR ARQUIVO .sequelizerc
+const path = require('path');
+
+module.exports = {
+  'config': path.resolve('share', 'config.js'),
+  'models-path': path.resolve('share', 'models'),
+  'seeders-path': path.resolve('share', 'seeders'),
+  'migrations-path': path.resolve('share', 'migrations')
+};
+
+######### CRIAR PASTAS
+npx sequelize-cli init 
+
+######### CRIAR DB
+editar config.js
+adicionar usuÃ¡rio no servidor mySQL
+require('dotenv').config(); 
+const db_name = process.env.DB_DATABASE;
+const db_user = process.env.DB_USERNAME;
+const db_pass = process.env.DB_PASSWORD;
+const db_host = process.env.DB_HOSTNAME;
+const db_type = process.env.DB_DATATYPE;
+module.exports = {
+  "development": {
+      "username": db_user,
+      "password": db_pass,
+      "database": db_name,
+      "host": db_host,
+      "dialect": db_type
+  },
+  "test": {
+    "username": db_user,
+    "password": db_pass,
+    "database": db_name,
+    "host": db_host,
+    "dialect": db_type
+  },
+  "production": {
+    "username": db_user,
+    "password": db_pass,
+    "database": db_name,
+    "host": db_host,
+    "dialect": db_type
+  }
+};
+e rodar:
+npx sequelize-cli db:create
+
+######### CRIAR MODELS E MIGRATIONS
+npx sequelize-cli model:generate --name User --attributes name:string,email:string,dateBirth:date
+
+######### DEFINIR ASSOCIAÃ‡Ã•ES NO ARQUIVO index dos models
+Aluno.associate = function(models) {
+  Aluno.belongsTo(models.Curso);
+}
+User.belongsTo(models.Department,{foreignKey: 'department_id', as:'department'});
+db.Item.hasMany(db.Avaliation, {as:'avaliatons'});
+
+
+######### SINCRONIZAR DB
+db.sequelize.sync({ force: true }).then(() => {
+  console.log("Drop and re-sync db.");
+});
+
+######### CRIAR SEEDS
+npx sequelize-cli seed:generate --name demoUser
+
+######### RODAR SEEDS
+editar arquivo e rodar
+npx sequelize-cli db:seed:all
+
+######### CRIAR SERVIDOR
+npm install --save express
+npm install --save body-parser
+npm install --save chalk@4.1.2
+npm install --save moment
+npm install --save nodemon
+criar arquivo server.js
+const bodyParser = require('body-parser');
+const router = require('./routes')
+const express = require('express');
+const app = express();
+const chalk = require("chalk");
+require('dotenv').config(); 
+const host = process.env.APP_HOST;
+const port = process.env.APP_PORT;
+app.use(express.json());
+app.use(router);
+app.listen(port, ()=>{console.log(chalk.blue(`Server running at http://${host}:${port}/`));});
+module.exports = app, router;
+
+######### CRIAR CONEXÃƒO COM DB
+criar arquivo db.js
+const {Sequelize} = require('sequelize'); 
+const moment = require('moment');
+const chalk = require('chalk');
+console.log(chalk.yellow('###############################################'));
+console.log(chalk.red('  APPLICATION STARTED IN: '+moment().format("DD/MM/YYYY HH:mm:ss")));
+console.log(chalk.yellow('###############################################'));
+require('dotenv').config(); 
+const db_name = process.env.DB_DATABASE;
+const db_user = process.env.DB_USERNAME;
+const db_pass = process.env.DB_PASSWORD;
+const db_host = process.env.DB_HOSTNAME;
+const db_type = process.env.DB_DATATYPE;
+const database = new Sequelize(db_name, db_user, db_pass, {host: db_host,dialect: db_type,query:{raw:true}});  
+  try {database.authenticate();console.log(chalk.blue("mySQL connected successfully!"));} 
+	catch (error) {console.error(chalk.red("Fail on mySQL connection: ", error));}
+    module.exports = database;
+
+######### CRIAR SCRIPT DE START
+"start": "nodemon index.js"
+
+######### CRIAR ROTAS
+routes/index.js
+const express = require('express');
+const alunoRouter = require('./alunoRouter');
+const cursoRouter = require('./cursoRouter');
+const router = express.Router();
+const moment = require('moment');
+const chalk = require('chalk');
+// middleware that is specific to this router
+router.use((req, res, next) => {console.log(chalk.magenta('RequisiÃ§Ã£o -> Hora: '+moment().format("MM/DD/YYYY HH:mm:ss"), " && URL -> "+req.path));
+    next() })
+router.use('/alunos', alunoRouter);
+router.use('/cursos', cursoRouter);
+router.get('/',function(req,res){return res.send("PÃ¡gina Inicial")});
+module.exports = router;
+routes/alunoRouter.js
+const express = require ('express');
+const AlunoController = require('../controllers/AlunoController');
+const router = express.Router();
+router.get('/', AlunoController.index);
+router.get('/:id', AlunoController.show);
+router.post('/', AlunoController.store);
+router.put('/:id', AlunoController.update);
+router.delete('/:id', AlunoController.delete);
+module.exports = router;
+
+######### CRIAR CONTROLLERS
+const Aluno = require("../models/aluno");
+const Curso = require("../models/curso");
+exports.index = async (req,res)=>{
+  const alunos = await Aluno.findAll();
+  return res.json(alunos)}
+exports.show = async(req,res)=>{
+  const aluno = await Aluno.findByPk(req.params.id);
+  return res.json(aluno);}
+exports.store = async(req,res)=>{
+  const aluno = await Aluno.create(req.body);
+  return res.json(aluno)}
+exports.update = async(req,res)=>{
+  await Aluno.update(req.body, {where: {id: req.params.id}});
+  const aluno = await Aluno.findByPk(req.params.id);
+  return res.json(aluno)}
+exports.delete = async(req,res)=>{
+  const aluno = await Aluno.findByPk(req.params.id);
+  await Aluno.destroy({where: {id: req.params.id}});
+  return res.json(aluno)}
+
+######### DEPLOY
+*redirecionar porta
+SITES/DOMINIOS/REDIRECIONAMENTOS
+http://estoque.scheleder.com/ ==> http://scheleder.com:8888
+*Instalar nvm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+*Verificar versões do nodejs
+nvm ls-remote
+*Instalar nodejs
+nvm install 14.3.0
+*Clonar repositorio
+git clone http...
+*Criar .env
+*instalar dependencias
+npm install
+*instalar PM2
+npm install pm2@latest -g
+*rodar PM2
+nohup pm2 start index.js --watch --name estoque --max-memory-restart 256
+PS: NOHUP matem persistencia
+*Salvar sessão
+pm2 save
+*listar
+pm2 list
+*Monitorar
+pm2 monit
+*parar
+pm2 stop estoque
+*iniciar
+pm2 start estoque
+*excluir
+pm2 delete estoque
+
+pm2 stop all
+pm2 delete all
+pm2 save --force
+pm2 start /home/u119241193/public_html/estoque/./estoque.sh --name estoque --watch
+pm2 save --force
+cat ~/.pm2/dump.pm2
+pm2 restart all
+pm2 resurrect
+pm2 logs
+pm2 describe estoque
+pm2 flush
+pm2 logpm
+pm2 monit
+pm2 list
+
+sudo service nginx restart
+nginx status
+pm2 start index.js --name estoque pm2 -watch
+
+server {
+    listen 80;
+    server_name estoque-facil.com;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name estoque-facil.com;
+
+    ssl_certificate /etc/letsencrypt/live/estoque-facil.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/estoque-facil.com/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+
+    # Configuração para o frontend React
+    location / {
+        root /path/to/your/react/build;
+        try_files $uri /index.html;
+    }
+
+    # Configuração para a API Node.js
+    location /api/ {
+        proxy_pass http://localhost:3000/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+
+
+
+
