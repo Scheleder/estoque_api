@@ -55,6 +55,12 @@ exports.register = async (req, res) => {
     if (!email) {
         return res.status(202).json({ msg: "E-mail é obrigatório!" })
     }
+
+    const domain = "@grupoboticario.com.br";
+    if (email.substring(email.length - domain.length) != domain) {
+        return res.status(202).json({ msg: "E-mail inválido!" })
+    }
+
     if (!password) {
         return res.status(202).json({ msg: "Senha é obrigatória!" })
     }
