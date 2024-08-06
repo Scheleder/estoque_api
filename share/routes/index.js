@@ -23,7 +23,7 @@ router.use((req, res, next) => {
 
 ////HOME///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //router.get('/',function(req,res){return res.send("Página Inicial")});
-router.get('/', function (req, res) { res.redirect('http://localhost:3000/api-docs') });
+//router.get('/swagger', function (req, res) { res.redirect('http://localhost:3000/api-docs') });
 
 ////AUTH//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 router.use('/auth', AuthRouter);
