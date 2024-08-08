@@ -17,6 +17,9 @@ exports.create = async (req, res) => {
   if (!componentId) {
     return res.status(202).json({ msg: "Componente é obrigatório!" })
   }
+  if (!localId) {
+    return res.status(202).json({ msg: "Estoque é obrigatório!" })
+  }
 
   //CHECK ITEM
   const itemExists = await Item.findOne({ where: { componentId: componentId } });
@@ -33,8 +36,8 @@ exports.create = async (req, res) => {
     adress,
     quantity: quantity ? quantity : 0,
     minimum: minimum ? minimum : 0,
-    localId: localId ? localId : 1,
-    componentId: componentId ? componentId : 1,
+    localId: localId,
+    componentId: componentId,
   })
 
   try {
@@ -159,8 +162,8 @@ exports.update = async (req, res) => {
     adress: adress || item.adress,
     quantity: quantity || item.quantity || 0,
     minimum: minimum || item.minimum || 0,
-    componentId: componentId || item.componentId || 1,
-    localId: localId || item.localId || 1,
+    componentId: componentId || item.componentId,
+    localId: localId || item.localId,
     updatedAt: moment.tz('America/Sao_Paulo').format()
   };
 
