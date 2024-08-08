@@ -17,6 +17,9 @@ exports.create = async (req, res) => {
   if (!itemId) {
     return res.status(202).json({ msg: "Item é obrigatório!" })
   }
+  if (!localId) {
+    return res.status(202).json({ msg: "Estoque é obrigatório!" })
+  }
 
   const targetItem = await Item.findByPk(itemId)
   var updatedFields = {}; 
@@ -50,6 +53,8 @@ exports.create = async (req, res) => {
     updatedFields = {
       quantity: parseFloat(targetItem.quantity) - parseFloat(quantity)
     }; 
+    //CRIAR O ITEM NO ESTOQUE DESTINO OU SE EXISTIR ADICIONAR A QUANTIDADE TRANSFERIDA
+    //VERIFICAR A NECESSIDADE DE CONFIRMAÇÃO DA ENTRADA FISICA DO ITEM
   }
   await targetItem.update(updatedFields)
 
@@ -207,10 +212,10 @@ exports.update = async (req, res) => {
   const updatedFields = {
     type: type || movement.type,
     destination: destination || movement.destination,
-    quantity: quantity || movement.quantity || 1,
-    userId: userId || movement.userId || 1,
-    itemId: itemId || movement.itemId || 1,
-    localId: localId || movement.localId || 1,
+    quantity: quantity || movement.quantity,
+    userId: userId || movement.userId,
+    itemId: itemId || movement.itemId,
+    localId: localId || movement.localId,
     updatedAt: moment.tz('America/Sao_Paulo').format()
   };
 
